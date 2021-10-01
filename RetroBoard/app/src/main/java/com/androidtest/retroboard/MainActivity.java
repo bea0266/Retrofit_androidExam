@@ -22,7 +22,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends Activity {
-    final static String URL = "http://192.168.35.4:3005";
+    final static String URL = "http://localhost:3005";
     Button btnWrite;
     CustomAdapter adapter;
     ListView postList;
