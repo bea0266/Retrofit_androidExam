@@ -55,14 +55,14 @@ public class CustomAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void addItem(String title,  int hits, String writer, String write_date){
+    public void addItem(String title,  String description,  int hits, String writer, String write_date){
         ListviewItem item = new ListviewItem();
 
         item.setWrite_date(write_date);
         item.setWriter(writer);
         item.setHits(hits);
         item.setTitle(title);
-
+        item.setDescription(description);
         listviewItemList.add(item);
     }
 }

@@ -1,10 +1,26 @@
 package com.androidtest.retroboard;
 
-public class ListviewItem {
+import com.google.gson.annotations.SerializedName;
+
+public class ListviewItem  {
+    @SerializedName("title")
     private String title;
+    @SerializedName("writer")
     private String writer;
+    @SerializedName("description")
+    private String description;
+    @SerializedName("write_date")
     private String write_date;
-    private int hits = 0;
+    @SerializedName("hits")
+    private int hits;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public String getTitle() {
         return title;
@@ -37,4 +53,6 @@ public class ListviewItem {
     public void setHits(int hits) {
         this.hits = hits;
     }
+
+
 }
