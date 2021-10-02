@@ -17,7 +17,7 @@ public class CustomAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
+    public ListviewItem getItem(int position) {
         return listviewItemList.get(position) ;
     }
 

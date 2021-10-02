@@ -6,6 +6,7 @@ import retrofit2.Response;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 
 public interface APIservice {
     @FormUrlEncoded
@@ -16,5 +17,13 @@ public interface APIservice {
         @Field("description") String description,
         @Field("write_date") String write_date,
         @Field("hits") int hits
+    );
+
+    @FormUrlEncoded
+    @PUT("/addHits")
+    Call<ListviewItem> updateHits(
+            @Field("position") int position,
+            @Field("hits") int hits
+
     );
 }

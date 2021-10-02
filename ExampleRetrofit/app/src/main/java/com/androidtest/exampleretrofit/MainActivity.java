@@ -3,6 +3,7 @@ package com.androidtest.exampleretrofit;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,7 +23,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-    final static String URL = "http://192.168.35.4:8000";
+    final static String URL = "http://localhost:8000";
     Button btnSend, btnSelect;
     EditText etId, etPw;
     TextView tvResult;
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<UserInfo> call, Throwable t) {
                             tvResult.setText("오류가 발생했습니다.");
+                            Log.e("throwable", t.getMessage());
 
                     }
                 });

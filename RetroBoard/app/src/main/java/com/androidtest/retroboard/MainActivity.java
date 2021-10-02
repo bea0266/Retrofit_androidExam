@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -41,15 +42,27 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
-
         btnWrite = (Button) findViewById(R.id.btnWrite);
         postList = (ListView) findViewById(R.id.listView);
 
         adapter = new CustomAdapter();
         postList.setAdapter(adapter);
 
+        postList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+                intent.putExtra("getTitle", adapter.getItem(position).getTitle());
+                intent.putExtra("getWriter", adapter.getItem(position).getWriter());
+                intent.putExtra("getHits", Integer.toString(adapter.getItem(position).getHits()));
+                intent.putExtra("getDate", adapter.getItem(position).getWrite_date());
+                intent.putExtra("getDesc", adapter.getItem(position).getDescription());
+                intent.putExtra("position", position);
+                startActivityForResult(intent,101);
+
+            }
+        });
         //adapter.addItem("제목", 1,"baegood", "2021-10-01");
         btnWrite.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,9 +97,17 @@ public class MainActivity extends Activity {
                     @Override
                     public void onFailure(Call<ListviewItem> call, Throwable t) {
                         Log.e("dataset", "title:"+getTitle+" description:"+getDesc+" writer:"+getWriter+" write_date:"+getDate);
+                        Log.e("error", t.getMessage());
                         Toast.makeText(getApplicationContext(), "처리 도중 오류가 발생했습니다: "+t.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
+
+
+            } else if(requestCode==101){
+
+                int getHits = data.getIntExtra("getHits",0);
+                adapter.getItem(data.getIntExtra("position",0)).setHits(getHits);
+                adapter.notifyDataSetChanged();
 
 
             } else {
