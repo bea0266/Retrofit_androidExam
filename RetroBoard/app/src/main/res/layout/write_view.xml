@@ -4,9 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
         <LinearLayout
             android:id="@+id/layout1"
             android:orientation="horizontal"
@@ -29,30 +26,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
-        <LinearLayout
-            android:id="@+id/layout2"
-            android:orientation="horizontal"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-            <Button
-                android:id="@+id/btnUpdate"
-                android:text="수정"
-                android:layout_margin="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-            <Button
-                android:id="@+id/btnClear2"
-                android:text="취소"
-                android:layout_margin="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
-    </FrameLayout>
+
+
 
     <EditText
         android:id="@+id/etWriter"

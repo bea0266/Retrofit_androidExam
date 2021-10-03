@@ -23,7 +23,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends Activity {
-    final static String URL = "http://localhost:3005";
+    final static String URL = "http://192.168.35.4:3005";
     Button btnWrite;
     CustomAdapter adapter;
     ListView postList;
@@ -48,6 +48,16 @@ public class MainActivity extends Activity {
         adapter = new CustomAdapter();
         postList.setAdapter(adapter);
 
+
+        //adapter.addItem("제목", 1,"baegood", "2021-10-01");
+        btnWrite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, WriteActivity.class);
+                startActivityForResult(intent, 100);
+            }
+        });
+
         postList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -61,14 +71,6 @@ public class MainActivity extends Activity {
                 intent.putExtra("position", position);
                 startActivityForResult(intent,101);
 
-            }
-        });
-        //adapter.addItem("제목", 1,"baegood", "2021-10-01");
-        btnWrite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, WriteActivity.class);
-                startActivityForResult(intent, 100);
             }
         });
 
@@ -107,6 +109,11 @@ public class MainActivity extends Activity {
 
                 int getHits = data.getIntExtra("getHits",0);
                 adapter.getItem(data.getIntExtra("position",0)).setHits(getHits);
+                adapter.getItem(data.getIntExtra("position",0)).setWriter(data.getStringExtra("getWriter"));
+                adapter.getItem(data.getIntExtra("position",0)).setTitle(data.getStringExtra("getTitle"));
+                adapter.getItem(data.getIntExtra("position",0)).setDescription(data.getStringExtra("getDesc"));
+                adapter.getItem(data.getIntExtra("position",0)).setWrite_date(data.getStringExtra("getDate"));
+
                 adapter.notifyDataSetChanged();
 
 

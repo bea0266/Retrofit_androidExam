@@ -20,6 +20,7 @@
         </activity>
         <activity android:name=".WriteActivity" android:label="게시글작성양식activity" />
         <activity android:name=".DetailActivity" android:label="세부내용activity"/>
+        <activity android:name=".WriteUpdateActivity" android:label="게시글수정양식" />
     </application>
 
 </manifest>

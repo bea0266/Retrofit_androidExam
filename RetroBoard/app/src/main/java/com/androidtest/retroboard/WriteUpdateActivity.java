@@ -6,51 +6,40 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.ButtonBarLayout;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class WriteActivity extends Activity {
-    Button btnClear, btnWrite, btnUpdate, btnClear2;
-    EditText etTitle, etWriter, etDesc; //추후 사용할것들
+public class WriteUpdateActivity extends Activity {
+    Button btnUpdate, btnClear;
+    EditText etTitle, etDesc, etWriter;
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     String write_date;
-    LinearLayout layout1, layout2;
     Calendar cal  = Calendar.getInstance();
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.write_view);
-
+        setContentView(R.layout.activity_write_update);
 
         btnClear = (Button) findViewById(R.id.btnClear);
-        btnWrite = (Button) findViewById(R.id.btnWrite);
+        btnUpdate = (Button) findViewById(R.id.btnUpdate);
         etTitle = (EditText) findViewById(R.id.etTitle);
         etWriter = (EditText) findViewById(R.id.etWriter);
         etDesc = (EditText) findViewById(R.id.etDesc);
-
-
-
-
-
-
-        btnClear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        btnWrite.setOnClickListener(new View.OnClickListener() {
+        Intent intent = getIntent();
+        String getTitle = intent.getStringExtra("title");
+        String getDesc = intent.getStringExtra("description");
+        String getWriter = intent.getStringExtra("writer");
+        etWriter.setText(getWriter);
+        etTitle.setText(getTitle);
+        etDesc.setText(getDesc);
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 write_date = sdf.format(cal.getTime());
-                Intent intent = new Intent(WriteActivity.this, MainActivity.class);
+                Intent intent = new Intent(WriteUpdateActivity.this, DetailActivity.class);
                 intent.putExtra("Title", etTitle.getText().toString());
                 intent.putExtra("Writer", etWriter.getText().toString());
                 intent.putExtra("Description", etDesc.getText().toString());
@@ -61,8 +50,11 @@ public class WriteActivity extends Activity {
             }
         });
 
-
-
-
+        btnClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 }

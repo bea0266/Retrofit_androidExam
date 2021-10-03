@@ -22,7 +22,7 @@ public class DetailActivity extends Activity {
     Button btnDelete, btnUpdate;
     static int hits=0;
     static int position = 0;
-    final String URL = "http://172.16.61.106:3005";
+    final String URL = "http://192.168.35.4:3005";
 
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(URL)
@@ -40,7 +40,8 @@ public class DetailActivity extends Activity {
         tvHits = (TextView) findViewById(R.id.tvHits);
         tvWriter = (TextView) findViewById(R.id.tvWriter);
         tvDate = (TextView) findViewById(R.id.tvDate);
-
+        btnUpdate = (Button) findViewById(R.id.btnUpdate);
+        btnDelete = (Button) findViewById(R.id.btnDelete);
 
 
         Intent intent = getIntent();
@@ -49,18 +50,31 @@ public class DetailActivity extends Activity {
         hits = Integer.parseInt(intent.getStringExtra("getHits"));
         hits++;
 
+        String getTitle = intent.getStringExtra("getTitle");
+        String getDesc = intent.getStringExtra("getDesc");
+        String getWriter = intent.getStringExtra("getWriter");
+        String getDate = intent.getStringExtra("getDate");
 
 
-        tvTitle.setText("제목 : "+intent.getStringExtra("getTitle"));
-        tvDesc.setText("내용 : "+intent.getStringExtra("getDesc"));
-        tvHits.setText("조회 수  "+hits+"회");
-        tvWriter.setText("작성자 : "+intent.getStringExtra("getWriter"));
-        tvDate.setText("작성일자 : " +intent.getStringExtra("getDate"));
 
+
+        tvTitle.setText(getTitle);
+        tvDesc.setText(getDesc);
+        tvHits.setText(Integer.toString(hits));
+        tvWriter.setText(getWriter);
+        tvDate.setText(getDate);
+
+        /*
+            수정 버튼 누를 시 writeactivity로 이동하고 수정버튼 활성화
+         */
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DetailActivity.this, WriteActivity.class);
+                Intent intent = new Intent(DetailActivity.this, WriteUpdateActivity.class);
+                intent.putExtra("title", getTitle);
+                intent.putExtra("description",  getDesc);
+                intent.putExtra("writer",  getWriter);
+
                 startActivityForResult(intent, 200);
 
             }
@@ -74,7 +88,17 @@ public class DetailActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode==RESULT_OK){
-            if(requestCode == 200){
+            if(requestCode == 200){ //수정 완료되었을경우
+                String getTitle = data.getStringExtra("Title");
+                String getDesc = data.getStringExtra("Description");
+                String getDate = data.getStringExtra("Write_date");
+                String getWriter = data.getStringExtra("Writer");
+
+                tvTitle.setText(getTitle);
+                tvDesc.setText(getDesc);
+                tvWriter.setText(getWriter);
+                tvDate.setText(getDate);
+
 
             }
         }
@@ -85,6 +109,10 @@ public class DetailActivity extends Activity {
         Intent intent = new Intent(DetailActivity.this, MainActivity.class);
         intent.putExtra("getHits", hits);
         intent.putExtra("position", position);
+        intent.putExtra("getTitle", tvTitle.getText().toString());
+        intent.putExtra("getWriter", tvWriter.getText().toString());
+        intent.putExtra("getDate", tvDate.getText().toString());
+        intent.putExtra("getDesc", tvDesc.getText().toString());
         Call<ListviewItem> call = apiService.updateHits(position, hits);
         call.enqueue(new Callback<ListviewItem>() {
             @Override
