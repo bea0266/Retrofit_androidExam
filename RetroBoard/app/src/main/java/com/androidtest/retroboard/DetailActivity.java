@@ -1,15 +1,20 @@
 package com.androidtest.retroboard;
 
 import android.app.Activity;
+import android.app.LauncherActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresPermission;
+
+import java.util.List;
+import java.util.ListIterator;
 
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -22,7 +27,7 @@ public class DetailActivity extends Activity {
     Button btnDelete, btnUpdate;
     static int hits=0;
     static int position = 0;
-    final String URL = "http://192.168.35.4:3005";
+    final String URL = "http://localhost:3005";
 
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(URL)
@@ -74,9 +79,32 @@ public class DetailActivity extends Activity {
                 intent.putExtra("title", getTitle);
                 intent.putExtra("description",  getDesc);
                 intent.putExtra("writer",  getWriter);
+                intent.putExtra("position", position);
 
                 startActivityForResult(intent, 200);
 
+            }
+        });
+
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                Call<ListviewItem> call = apiService.deletePost(position+1);
+                call.enqueue(new Callback<ListviewItem>() {
+                    @Override
+                    public void onResponse(Call<ListviewItem> call, Response<ListviewItem> response) {
+                        Toast.makeText(getApplicationContext(), "삭제되었습니다.", Toast.LENGTH_SHORT).show();
+
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ListviewItem> call, Throwable t) {
+                        Toast.makeText(getApplicationContext(), "요청 실패 : "+ t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 
