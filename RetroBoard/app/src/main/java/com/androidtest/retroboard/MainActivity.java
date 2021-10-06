@@ -1,8 +1,11 @@
 package com.androidtest.retroboard;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,7 +26,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends Activity {
-    final static String URL = "http://localhost:3005";
+    final static String URL = "http://192.168.35.4:3005";
     Button btnWrite;
     CustomAdapter adapter;
     ListView postList;
@@ -61,7 +64,7 @@ public class MainActivity extends Activity {
         postList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                Log.d("position", Integer.toString(position));
                 Intent intent = new Intent(MainActivity.this, DetailActivity.class);
                 intent.putExtra("getTitle", adapter.getItem(position).getTitle());
                 intent.putExtra("getWriter", adapter.getItem(position).getWriter());
@@ -71,6 +74,45 @@ public class MainActivity extends Activity {
                 intent.putExtra("position", position);
                 startActivityForResult(intent,101);
 
+            }
+        });
+
+        postList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("status", "now long touch" );
+                AlertDialog.Builder msgBuilder = new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("게시글 삭제")
+                        .setMessage("정말 삭제하시겠습니까?")
+                        .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Call<ListviewItem> call = apiService.deletePost(position+1);
+                                call.enqueue(new Callback<ListviewItem>() {
+                                    @Override
+                                    public void onResponse(Call<ListviewItem> call, Response<ListviewItem> response) {
+                                        Toast.makeText(getApplicationContext(), "삭제되었습니다.", Toast.LENGTH_SHORT).show();
+                                        adapter.removeItem(position);
+                                        adapter.notifyDataSetChanged();
+
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<ListviewItem> call, Throwable t) {
+                                        Toast.makeText(getApplicationContext(), "요청 실패 : "+ t.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                        })
+                        .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(getApplicationContext(), "취소하였습니다.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                AlertDialog msgDlg = msgBuilder.create();
+                msgDlg.show();
+                return true;
             }
         });
 
@@ -121,8 +163,12 @@ public class MainActivity extends Activity {
                         Toast.makeText(getApplicationContext(), "처리 도중 오류가 발생했습니다.(요청 오류).", Toast.LENGTH_SHORT).show();
             }
         }
-    }
+    } // 여기까지가 온액티비티리절트
 
+    void showDialog() {
+
+
+    }
 }
 
 

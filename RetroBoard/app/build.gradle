@@ -10,6 +10,7 @@ android {
         applicationId "com.androidtest.retroboard"
         minSdkVersion 23
         targetSdkVersion 30
+        multiDexEnabled true
         versionCode 1
         versionName "1.0"
 

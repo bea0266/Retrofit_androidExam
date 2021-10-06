@@ -36,9 +36,6 @@ public class WriteActivity extends Activity {
 
 
 
-
-
-
         btnClear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
