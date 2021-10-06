@@ -26,7 +26,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends Activity {
-    final static String URL = "http://192.168.35.4:3005";
+    final static String URL = "http:localhost:3005";
     Button btnWrite;
     CustomAdapter adapter;
     ListView postList;
@@ -81,25 +81,28 @@ public class MainActivity extends Activity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("status", "now long touch" );
+
                 AlertDialog.Builder msgBuilder = new AlertDialog.Builder(MainActivity.this)
                         .setTitle("게시글 삭제")
                         .setMessage("정말 삭제하시겠습니까?")
                         .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Call<ListviewItem> call = apiService.deletePost(position+1);
-                                call.enqueue(new Callback<ListviewItem>() {
+                                Call<List<ListviewItem>> call = apiService.deletePost(position+1, adapter.getCount());
+                                call.enqueue(new Callback<List<ListviewItem>>() {
                                     @Override
-                                    public void onResponse(Call<ListviewItem> call, Response<ListviewItem> response) {
+                                    public void onResponse(Call<List<ListviewItem>> call, Response<List<ListviewItem>> response) {
                                         Toast.makeText(getApplicationContext(), "삭제되었습니다.", Toast.LENGTH_SHORT).show();
                                         adapter.removeItem(position);
+                                        Log.d("listviewsize", Integer.toString(adapter.getCount()));
                                         adapter.notifyDataSetChanged();
 
                                     }
 
                                     @Override
-                                    public void onFailure(Call<ListviewItem> call, Throwable t) {
+                                    public void onFailure(Call<List<ListviewItem>> call, Throwable t) {
                                         Toast.makeText(getApplicationContext(), "요청 실패 : "+ t.getMessage(), Toast.LENGTH_SHORT).show();
+                                        Log.e("response-error", t.getMessage());
                                     }
                                 });
                             }
@@ -165,11 +168,12 @@ public class MainActivity extends Activity {
         }
     } // 여기까지가 온액티비티리절트
 
-    void showDialog() {
 
-
-    }
 }
+
+
+
+
 
 
 

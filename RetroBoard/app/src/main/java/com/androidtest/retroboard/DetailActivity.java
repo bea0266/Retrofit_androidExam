@@ -28,7 +28,7 @@ public class DetailActivity extends Activity {
     Button btnDelete, btnUpdate;
     static int hits=0;
     static int position = 0;
-    final String URL = "http://192.168.35.4:3005";
+    final String URL = "http://localhost:3005";
 
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(URL)

@@ -25,7 +25,7 @@ public class WriteUpdateActivity extends Activity {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     String write_date;
     Calendar cal  = Calendar.getInstance();
-    final static String URL = "http://192.168.35.4:3005";
+    final static String URL = "http://localhost:3005";
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(URL)
             .addConverterFactory(GsonConverterFactory.create())
