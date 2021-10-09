@@ -30,6 +30,8 @@ android {
 }
 
 dependencies {
+
+    compile 'com.android.support:multidex:1.0.1' //multidex
     // Retrofit 라이브러리
     implementation 'com.squareup.retrofit2:retrofit:2.6.4'
 

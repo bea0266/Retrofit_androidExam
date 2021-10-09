@@ -1,5 +1,6 @@
 package com.androidtest.retroboard;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -7,6 +8,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,10 +17,22 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -26,7 +40,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends Activity {
-    final static String URL = "http:localhost:3005";
+    final static String URL = "http://localhost:3005";
     Button btnWrite;
     CustomAdapter adapter;
     ListView postList;
@@ -51,6 +65,44 @@ public class MainActivity extends Activity {
         adapter = new CustomAdapter();
         postList.setAdapter(adapter);
 
+        Call<ResponseBody> call = apiService.selectPost();
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                try {
+                    String responseData = response.body().string();
+                    Log.d("responsebody", responseData);
+                    if(responseData.equals("[]")) {}
+                    else {
+                        JSONArray jsonArray = new JSONArray(responseData);
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            String title = jsonObject.getString("title");
+                            String writer = jsonObject.getString("writer");
+                            String description = jsonObject.getString("description");
+                            int hits = jsonObject.getInt("hits");
+                            String date = jsonObject.getString("write_date");
+
+
+                            adapter.addItem(title, description, hits, writer,date);
+                            adapter.notifyDataSetChanged();
+                            Log.d("itemadd", i + 1 + "번째 아이템이 추가되었습니다." + title + "," + description + "," + hits + "," +
+                                    writer + "," + date);
+                        }
+
+                    }
+                } catch (IOException | JSONException e){
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e("responsebody-error", t.getMessage());
+            }
+        });
 
         //adapter.addItem("제목", 1,"baegood", "2021-10-01");
         btnWrite.setOnClickListener(new View.OnClickListener() {
@@ -137,8 +189,15 @@ public class MainActivity extends Activity {
                     @Override
                     public void onResponse(Call<ListviewItem> call, Response<ListviewItem> response) {
                         adapter.addItem(getTitle, getDesc, 0, getWriter, getDate);
+                       /*
+                        //커밋 후 추가 예정
+                        if(adapter.getCount()>1){
+
+                            adapter.swapItem(adapter.getCount());
+                        }*/
                         adapter.notifyDataSetChanged();
                         Toast.makeText(getApplicationContext(), "정상적으로 처리되었습니다.", Toast.LENGTH_SHORT).show();
+                        Log.d("listviewsize", Integer.toString(adapter.getCount()));
                     }
 
                     @Override

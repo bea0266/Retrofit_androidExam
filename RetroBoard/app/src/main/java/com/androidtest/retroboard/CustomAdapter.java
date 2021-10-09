@@ -1,14 +1,19 @@
 package com.androidtest.retroboard;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 public class CustomAdapter extends BaseAdapter {
     private ArrayList<ListviewItem> listviewItemList = new ArrayList<ListviewItem>();
@@ -54,6 +59,16 @@ public class CustomAdapter extends BaseAdapter {
         dateTextView.setText(listviewItem.getWrite_date());
 
         return convertView;
+    }
+    public void swapItem(int cnt){
+/*
+//커밋 이후 작성할 코드
+        for(int i=cnt-1; i>0; i-- )
+        Collections.swap(listviewItemList, i, i-1 );
+        for(int i=0; i<listviewItemList.size(); i++) {
+            Log.d("listorder", "listorder[" + i + "]" + listviewItemList.get(i).getTitle());
+        }
+*/
     }
     public void removeItem(int position){
         listviewItemList.remove(position);
