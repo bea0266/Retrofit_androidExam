@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:layout_constraintHorizontal_chainStyle="spread"
+    android:id="@+id/relative"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="280dp"
     android:layout_height="150dp">
+
 
     <ImageView
 
@@ -19,13 +21,13 @@
 
     <TextView
         android:id="@+id/tvNickname"
-        android:layout_width="155dp"
-        android:layout_height="wrap_content"
+        android:layout_width="172dp"
+        android:layout_height="73dp"
         android:layout_alignBaseline="@+id/imageView"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="24dp"
-        android:text="닉네임"
+        android:layout_marginRight="8dp"
+        android:text="로그인하십시오."
         android:textSize="30sp" />
 
 

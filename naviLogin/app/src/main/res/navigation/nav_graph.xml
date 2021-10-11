@@ -25,4 +25,8 @@
         android:name="com.androidtest.navilogin.MainActivity"
         android:label="activity_main"
         tools:layout="@layout/activity_main" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.androidtest.navilogin.SettingsFragment"
+        android:label="SettingsFragment" />
 </navigation>
