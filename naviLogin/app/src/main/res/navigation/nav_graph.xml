@@ -7,12 +7,12 @@
     app:startDestination="@id/boardFragment2">
     <fragment
         android:id="@+id/boardFragment2"
-        android:name="com.androidtest.navilogin.BoardFragment"
+        android:name="com.androidtest.navilogin.fragment.BoardFragment"
         android:label="fragment_board"
         tools:layout="@layout/fragment_board" />
     <fragment
         android:id="@+id/mypageFragment"
-        android:name="com.androidtest.navilogin.MypageFragment"
+        android:name="com.androidtest.navilogin.fragment.MypageFragment"
         android:label="fragment_mypage"
         tools:layout="@layout/fragment_mypage" />
     <fragment
@@ -22,11 +22,11 @@
         tools:layout="@layout/fragment_login" />
     <activity
         android:id="@+id/mainActivity"
-        android:name="com.androidtest.navilogin.MainActivity"
+        android:name="com.androidtest.navilogin.activity.MainActivity"
         android:label="activity_main"
         tools:layout="@layout/activity_main" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.androidtest.navilogin.SettingsFragment"
+        android:name="com.androidtest.navilogin.fragment.SettingsFragment"
         android:label="SettingsFragment" />
 </navigation>

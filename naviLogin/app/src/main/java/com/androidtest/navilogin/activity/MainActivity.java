@@ -1,22 +1,19 @@
-package com.androidtest.navilogin;
+package com.androidtest.navilogin.activity;
 
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Point;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
-import android.view.Display;
-import android.view.Gravity;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,9 +22,15 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.androidtest.navilogin.fragment.BoardFragment;
+import com.androidtest.navilogin.fragment.HomeFragment;
+import com.androidtest.navilogin.fragment.MypageFragment;
+import com.androidtest.navilogin.R;
+import com.androidtest.navilogin.fragment.SettingsFragment;
 import com.google.android.material.navigation.NavigationView;
 
-import java.time.LocalDateTime;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -57,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         headNick = (TextView) header.findViewById(R.id.tvNickname);
         relative = (RelativeLayout)header.findViewById(R.id.relative);
 
-
+        getHashKey();
         setSupportActionBar(toolbar);
         actionBar=getSupportActionBar();
 
@@ -79,12 +82,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .beginTransaction()
                 .replace(R.id.frame_main, homeFragment).commit();
 
+        if(headNick.getText().equals("로그인\n하십시오.")){
+            isLogin=false;
+            relative.setClickable(true);
+        }
 
-
-         if(isLogin==false)
-         {
-             relative.setClickable(true);
-         }
 
 
 
@@ -137,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 isLogin = true;
                 String nickname = data.getStringExtra("id");
                 String password = data.getStringExtra("pw");
-                headNick.setText(nickname+"님 어서오세요.");
+                headNick.setText(nickname+"님\n어서오세요.");
 
 
 
@@ -221,6 +223,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .replace(R.id.frame_main, homeFragment).commit();
             activityNow="home";
 
+        }
+    }
+
+    private void getHashKey(){ //해쉬키 구하는 메서드
+        PackageInfo packageInfo = null;
+        try {
+            packageInfo = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        if (packageInfo == null)
+            Log.e("KeyHash", "KeyHash:null");
+
+        for (Signature signature : packageInfo.signatures) {
+            try {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            } catch (NoSuchAlgorithmException e) {
+                Log.e("KeyHash", "Unable to get MessageDigest. signature=" + signature, e);
+            }
         }
     }
 }

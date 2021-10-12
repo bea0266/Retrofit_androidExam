@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "847628825568",
+    "project_id": "navilogin-770f0",
+    "storage_bucket": "navilogin-770f0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:847628825568:android:e34c7ec2c1fef634d5b185",
+        "android_client_info": {
+          "package_name": "com.androidtest.navilogin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "847628825568-bf9vle8qnioskgdp292ifkemvdgs8o1u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.androidtest.navilogin",
+            "certificate_hash": "c027e24112a81bc79bd850ae1a71734f579c0d10"
+          }
+        },
+        {
+          "client_id": "847628825568-uspbeqb59a2506um1aue87klnudjoian.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhfcy06J-aAn5LGiglalmD1FPxDKPteq4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "847628825568-uspbeqb59a2506um1aue87klnudjoian.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

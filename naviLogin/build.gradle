@@ -5,7 +5,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-
+        classpath 'com.google.gms:google-services:4.3.10'
         def nav_version = "2.3.0"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
 
@@ -20,6 +20,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url 'https://devrepo.kakao.com/nexus/content/groups/public/' }
     }
 }
 

@@ -1,16 +1,16 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory app:title="계정">
-        <ListPreference
+        <Preference
             android:key="logout"
-            android:title="로그아웃"
-            android:summary="현재 로그인되어 있는 계정을 로그아웃시킵니다."/>
+            android:summary="현재 로그인되어 있는 계정을 로그아웃시킵니다."
+            android:title="로그아웃" />
 
-        <ListPreference
+        <Preference
             android:key="withdraw"
-            android:title="회원탈퇴"
-            android:summary="현재 로그인 중인 계정을 탈퇴시킵니다." />
+            android:summary="현재 로그인 중인 계정을 탈퇴시킵니다."
+            android:title="회원탈퇴" />
 
 
     </PreferenceCategory>
