@@ -14,6 +14,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +28,7 @@ import com.androidtest.navilogin.fragment.HomeFragment;
 import com.androidtest.navilogin.fragment.MypageFragment;
 import com.androidtest.navilogin.R;
 import com.androidtest.navilogin.fragment.SettingsFragment;
+import com.bumptech.glide.Glide;
 import com.google.android.material.navigation.NavigationView;
 
 import java.security.MessageDigest;
@@ -35,15 +37,19 @@ import java.security.NoSuchAlgorithmException;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private ActionBar actionBar;
+
     RelativeLayout relative;
     DrawerLayout drawerLayout;
+
     BoardFragment boardFragment;
     MypageFragment mypageFragment;
     HomeFragment homeFragment;
     SettingsFragment settingsFragment;
+
     NavigationView nav_view;
     View header;
     TextView headNick;
+    ImageView proImg;
     static boolean isLogin=false;
     static String activityNow = "home";
 
@@ -57,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         nav_view = (NavigationView) findViewById(R.id.nav_view);
         header = nav_view.getHeaderView(0);
 
+        proImg = (ImageView)header.findViewById(R.id.imageView);
         headNick = (TextView) header.findViewById(R.id.tvNickname);
         relative = (RelativeLayout)header.findViewById(R.id.relative);
 
@@ -137,9 +144,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if(requestCode==100){
 
                 isLogin = true;
-                String nickname = data.getStringExtra("id");
-                String password = data.getStringExtra("pw");
+                String nickname = data.getStringExtra("nickname");
+                String profileImg = data.getStringExtra("profileImg");
                 headNick.setText(nickname+"님\n어서오세요.");
+                Glide.with(this)
+                        .load(profileImg)
+                        .override(100,100)
+                        .into(proImg);
 
 
 

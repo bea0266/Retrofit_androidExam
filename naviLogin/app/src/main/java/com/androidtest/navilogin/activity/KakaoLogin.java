@@ -3,6 +3,7 @@ package com.androidtest.navilogin.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.kakao.auth.ISessionCallback;
@@ -10,6 +11,7 @@ import com.kakao.network.ErrorResult;
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.MeV2ResponseCallback;
 import com.kakao.usermgmt.response.MeV2Response;
+import com.kakao.usermgmt.response.model.UserAccount;
 import com.kakao.util.exception.KakaoException;
 
 import java.util.ArrayList;
@@ -37,14 +39,16 @@ public class KakaoLogin extends Activity {
 
         protected void requestMe() {
             UserManagement.getInstance().me(new MeV2ResponseCallback() {
+
                 @Override
                 public void onSessionClosed(ErrorResult errorResult) {
-                    loginActivity.directToSecondActivity(false);
+                    Log.e("KAKAO_API", "세션이 닫혀 있음: " + errorResult);
                 }
 
                 @Override
                 public void onSuccess(MeV2Response result) {
-                    loginActivity.directToSecondActivity(true);
+                    UserAccount kakaoAccount = result.getKakaoAccount();
+                    loginActivity.directToSecondActivity(true, kakaoAccount);
                 }
             });
         }
