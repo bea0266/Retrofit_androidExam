@@ -1,14 +1,26 @@
 package com.androidtest.navilogin.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import com.androidtest.navilogin.PostItem;
 import com.androidtest.navilogin.R;
+import com.androidtest.navilogin.activity.WriteboxActivity;
+
+import java.util.ArrayList;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,28 +29,13 @@ import com.androidtest.navilogin.R;
  */
 public class BoardFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    BoardAdapter boardAdapter;
 
     public BoardFragment() {
-        // Required empty public constructor
+
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment BoardFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+
     public static BoardFragment newInstance() {
         BoardFragment fragment = new BoardFragment();
         return fragment;
@@ -53,10 +50,51 @@ public class BoardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        ViewGroup viewgroup =(ViewGroup)inflater.inflate(R.layout.fragment_board, container, false);
+
+        Button writeBtn = (Button)viewgroup.findViewById(R.id.btnWrite);
+
+        writeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), WriteboxActivity.class);
+                startActivityForResult(intent,300);
+            }
+        });
+
+        ArrayList<PostItem> list = new ArrayList<>();
 
 
-        return inflater.inflate(R.layout.fragment_board, container, false);
+
+        // 리사이클러뷰에 LinearLayoutManager 객체 지정.
+        RecyclerView recyclerView = (RecyclerView)viewgroup.findViewById(R.id.recycler1);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity())) ;
+
+        boardAdapter = new BoardAdapter(list);
+        recyclerView.setAdapter(boardAdapter);
+
+
+
+
+
+        return viewgroup;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK){
+            if(requestCode==300){
+                Log.d("resultok","true"  );
+                String title = data.getStringExtra("title");
+                String description = data.getStringExtra("description");
+                boardAdapter.addItem(1, title, description, "bea0266","2021-01-11 11:11:11",
+                        10, 5, 3);
+                boardAdapter.swapItem(boardAdapter.getItemCount());
+                boardAdapter.notifyDataSetChanged();
 
+            }
+        }
+
+    }
 }
