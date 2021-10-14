@@ -23,6 +23,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.androidtest.navilogin.UserInfo;
 import com.androidtest.navilogin.fragment.BoardFragment;
 import com.androidtest.navilogin.fragment.HomeFragment;
 import com.androidtest.navilogin.fragment.MypageFragment;
@@ -37,7 +38,7 @@ import java.security.NoSuchAlgorithmException;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private ActionBar actionBar;
-
+    public static UserInfo userInfo = new UserInfo();
     RelativeLayout relative;
     DrawerLayout drawerLayout;
 
@@ -146,6 +147,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 isLogin = true;
                 String nickname = data.getStringExtra("nickname");
                 String profileImg = data.getStringExtra("profileImg");
+                String email = data.getStringExtra("email");
+                userInfo.setNickname(nickname);
+                userInfo.setProfileUrl(profileImg);
+                userInfo.setEmail(email);
+
                 headNick.setText(nickname+"님\n어서오세요.");
                 Glide.with(this)
                         .load(profileImg)
@@ -236,7 +242,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }
     }
-
+    public static String getUserName() {
+        return userInfo.getNickname();
+    }
+    public static String getUserEmail(){
+        return userInfo.getEmail();
+    }
+    public static String getThumbnailUrl(){
+        return userInfo.getProfileUrl();
+    }
     private void getHashKey(){ //해쉬키 구하는 메서드
         PackageInfo packageInfo = null;
         try {

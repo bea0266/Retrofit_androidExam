@@ -87,10 +87,12 @@ public class LoginActivity extends Activity {
             Profile profile = kakaoAccount.getProfile();
             String kakaoNick = profile.getNickname();
             String kakaoImg = profile.getThumbnailImageUrl();
-
+            String kakaoEmail = kakaoAccount.getEmail();
 
             intent.putExtra("nickname", kakaoNick);
             intent.putExtra("profileImg", kakaoImg);
+            intent.putExtra("email", kakaoEmail);
+
             setResult(RESULT_OK, intent);
             finish();
         }

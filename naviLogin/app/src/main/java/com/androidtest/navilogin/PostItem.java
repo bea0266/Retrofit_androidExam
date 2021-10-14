@@ -1,13 +1,23 @@
 package com.androidtest.navilogin;
 
+import com.google.gson.annotations.SerializedName;
+
 public class PostItem {
+    @SerializedName("postNo")
     private int postNo; //글번호
+    @SerializedName("title")
     private String title; //타이틀
+    @SerializedName("description")
     private String description;//내용
+    @SerializedName("writer")
     private String writer;//작성자
+    @SerializedName("write_date")
     private String write_date;//작성날짜
+    @SerializedName("hits")
     private int hits;//조회수
+    @SerializedName("comments")
     private int comments;//댓글수
+    @SerializedName("likes")
     private int likes;//추천수
 
     public int getPostNo() {

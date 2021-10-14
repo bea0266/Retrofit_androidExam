@@ -15,20 +15,40 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> {
-
+    private OnItemClickListener mListener = null;
     private ArrayList<PostItem> postData = null;
+    public interface OnItemClickListener {
+        void onItemClick(View v, int position);
+
+    }
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.mListener = listener;
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvTitle, tvHits, tvWriter, tvDate, tvLikes, tvComments;
         ViewHolder(View itemView) {
             super(itemView);
+
+
             tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
             tvHits = (TextView) itemView.findViewById(R.id.tvHits);
             tvWriter = (TextView) itemView.findViewById(R.id.tvWriter);
             tvDate = (TextView) itemView.findViewById(R.id.tvDate);
             tvLikes = (TextView) itemView.findViewById(R.id.tvLikes);
             tvComments = (TextView) itemView.findViewById(R.id.tvComments);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int pos = getAdapterPosition() ;
+                    if (pos != RecyclerView.NO_POSITION) {
+                      mListener.onItemClick(v,pos);
+
+                    }
+                }
+            });
         }
 
     }
@@ -75,6 +95,11 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
         for(int i=0; i<postData.size(); i++) {
             Log.d("listorder", "listorder[" + i + "]" + postData.get(i).getTitle());
         }
+
+    }
+    public void listCleaner(){
+
+        postData.clear();
 
     }
     @Override
