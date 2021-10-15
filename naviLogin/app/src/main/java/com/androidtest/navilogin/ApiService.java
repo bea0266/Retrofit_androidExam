@@ -14,6 +14,9 @@ public interface ApiService {
     @GET("/api/posts")
     Call<ResponseBody> getPosts();
 
+    @GET("/api/posts/{postNo}")
+    Call<ResponseBody> getPostinfo(@Path("postNo") int postNo);
+
     @FormUrlEncoded
     @POST("/api/posts/regist")
     Call<PostItem> addPost(
@@ -41,7 +44,7 @@ public interface ApiService {
     @PUT("/api/posts/hits/{postNo}")
     Call<PostItem> addHits(@Path("postNo")int postNo);
 
-    @DELETE("/api/posts/{postNo}")
+    @DELETE("/api/posts/remove/{postNo}")
     Call<PostItem> deletePost(@Path("postNo")int postNo);
 
     @FormUrlEncoded

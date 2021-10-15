@@ -19,6 +19,7 @@ import com.androidtest.navilogin.R;
 import com.kakao.auth.Session;
 import com.kakao.sdk.user.UserApiClient;
 import com.kakao.usermgmt.LoginButton;
+import com.kakao.usermgmt.response.MeV2Response;
 import com.kakao.usermgmt.response.model.Profile;
 import com.kakao.usermgmt.response.model.UserAccount;
 import com.kakao.usermgmt.response.model.UserProfile;
@@ -78,7 +79,7 @@ public class LoginActivity extends Activity {
     }
 
 
-    public void directToSecondActivity(Boolean result, UserAccount kakaoAccount) {
+    public void directToSecondActivity(Boolean result, UserAccount kakaoAccount, MeV2Response response) {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         if (result) {
@@ -88,7 +89,9 @@ public class LoginActivity extends Activity {
             String kakaoNick = profile.getNickname();
             String kakaoImg = profile.getThumbnailImageUrl();
             String kakaoEmail = kakaoAccount.getEmail();
+            long kakaoId = response.getId();
 
+            intent.putExtra("userId", kakaoId);
             intent.putExtra("nickname", kakaoNick);
             intent.putExtra("profileImg", kakaoImg);
             intent.putExtra("email", kakaoEmail);

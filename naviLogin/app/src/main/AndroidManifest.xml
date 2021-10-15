@@ -41,6 +41,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.WriteboxActivity"/>
+        <activity android:name=".activity.DetailActivity"/>
     </application>
 
 </manifest>

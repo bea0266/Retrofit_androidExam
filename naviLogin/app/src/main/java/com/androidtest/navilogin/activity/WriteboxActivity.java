@@ -38,7 +38,7 @@ public class WriteboxActivity extends AppCompatActivity {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     String write_date;
     Calendar cal  = Calendar.getInstance();
-    final static String URL = "http://192.168.35.4:3030";
+    final static String URL = "http://172.16.61.106:3030";
 
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(URL)

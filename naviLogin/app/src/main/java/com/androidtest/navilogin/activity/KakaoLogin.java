@@ -48,7 +48,7 @@ public class KakaoLogin extends Activity {
                 @Override
                 public void onSuccess(MeV2Response result) {
                     UserAccount kakaoAccount = result.getKakaoAccount();
-                    loginActivity.directToSecondActivity(true, kakaoAccount);
+                    loginActivity.directToSecondActivity(true, kakaoAccount, result);
                 }
             });
         }

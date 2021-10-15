@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.androidtest.navilogin.ApiService;
 import com.androidtest.navilogin.PostItem;
 import com.androidtest.navilogin.R;
+import com.androidtest.navilogin.activity.DetailActivity;
 import com.androidtest.navilogin.activity.WriteboxActivity;
 
 import org.json.JSONArray;
@@ -47,7 +48,7 @@ import static android.app.Activity.RESULT_OK;
 public class BoardFragment extends Fragment {
 
     BoardAdapter boardAdapter;
-    final static String URL = "http://192.168.35.4:3030";
+    final static String URL = "http://172.16.61.106:3030";
 
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(URL)
@@ -91,7 +92,8 @@ public class BoardFragment extends Fragment {
        boardAdapter.setOnItemClickListener(new BoardAdapter.OnItemClickListener() {
            @Override
            public void onItemClick(View v, int position) {
-               Toast.makeText(getActivity(), boardAdapter.getItem(position).getTitle(),Toast.LENGTH_SHORT).show();
+              Intent intent = new Intent(getActivity(), DetailActivity.class);
+              startActivity(intent);
            }
        });
 
@@ -102,14 +104,6 @@ public class BoardFragment extends Fragment {
                 startActivity(intent);
             }
         });
-
-
-
-
-
-
-
-
 
         return viewgroup;
     }

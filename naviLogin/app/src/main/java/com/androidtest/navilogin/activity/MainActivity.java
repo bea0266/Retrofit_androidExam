@@ -35,6 +35,8 @@ import com.google.android.material.navigation.NavigationView;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import static java.sql.DriverManager.println;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private ActionBar actionBar;
@@ -145,14 +147,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if(requestCode==100){
 
                 isLogin = true;
+                long userId = data.getLongExtra("userId",0);
                 String nickname = data.getStringExtra("nickname");
                 String profileImg = data.getStringExtra("profileImg");
                 String email = data.getStringExtra("email");
                 userInfo.setNickname(nickname);
                 userInfo.setProfileUrl(profileImg);
                 userInfo.setEmail(email);
-
+                userInfo.setUserId(userId);
                 headNick.setText(nickname+"님\n어서오세요.");
+                System.out.println("userId:"+ userId);
                 Glide.with(this)
                         .load(profileImg)
                         .override(100,100)
