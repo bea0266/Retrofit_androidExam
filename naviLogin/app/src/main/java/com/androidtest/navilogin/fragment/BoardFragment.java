@@ -48,7 +48,7 @@ import static android.app.Activity.RESULT_OK;
 public class BoardFragment extends Fragment {
 
     BoardAdapter boardAdapter;
-    final static String URL = "http://172.16.61.106:3030";
+    final static String URL = "http://aaa:3030";
 
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(URL)
@@ -129,6 +129,7 @@ public class BoardFragment extends Fragment {
 
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                             int postNo = jsonObject.getInt("postNo");
+                            long userId = jsonObject.getLong("userId");
                             String title = jsonObject.getString("title");
                             String writer = jsonObject.getString("writer");
                             String description = jsonObject.getString("description");
@@ -137,10 +138,10 @@ public class BoardFragment extends Fragment {
                             int comments = jsonObject.getInt("comments");
                             String write_date = jsonObject.getString("write_date");
 
-                            boardAdapter.addItem(postNo, title, description, writer, write_date, hits, comments, likes);
+                            boardAdapter.addItem(postNo, userId, title, description, writer, write_date, hits, comments, likes);
                             boardAdapter.notifyDataSetChanged();
-                            Log.d("itemadd", i + 1 + "번째 아이템이 추가되었습니다." + title + "," + description + "," + hits + "," + writer + "," + write_date +
-                                    "," + likes + "," + comments + ",");
+                            Log.d("itemadd", i + 1 + "번째 아이템이 추가되었습니다." + userId+","+ title + "," + description + "," + hits +
+                                    "," + writer + "," + write_date + "," + likes + "," + comments);
                         }
 
                     }

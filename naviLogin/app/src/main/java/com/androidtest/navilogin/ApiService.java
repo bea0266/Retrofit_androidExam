@@ -1,11 +1,17 @@
 package com.androidtest.navilogin;
 
+import com.google.gson.JsonArray;
+
+import java.util.List;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
+import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -18,8 +24,9 @@ public interface ApiService {
     Call<ResponseBody> getPostinfo(@Path("postNo") int postNo);
 
     @FormUrlEncoded
-    @POST("/api/posts/regist")
+    @POST("/api/posts")
     Call<PostItem> addPost(
+            @Field("userId") long userId,
             @Field("writer")String writer,
             @Field ("title")String title,
             @Field ("description")String description,
@@ -29,31 +36,35 @@ public interface ApiService {
             @Field ("write_date")String write_date);
 
     @FormUrlEncoded
-    @PUT("/api/posts/modify/{postNo}")
-    Call<PostItem> updatePost(@Path("postNo") int postNo,
-                              @Field("title") String title,
-                              @Field("description") String description,
-                              @Field("write_date") String write_date);
+    @PUT("/api/posts/{postNo}")
+    Call<PostItem> updatePost(
+            @Path("postNo") int postNo,
+            @Field("title") String title,
+            @Field("description") String description,
+            @Field("write_date") String write_date);
 
-    @PUT("/api/posts/likes/{postNo}")
-    Call<PostItem> addLike(@Path("postNo") int postNo);
+    @PUT("/api/posts/{postNo}/{likes}")
+    Call<PostItem> addLike(@Path("postNo") int postNo, @Path("likes") int likes);
 
-    @PUT("/api/posts/comment/{postNo}")
-    Call<PostItem> addComments(@Path("postNo")int postNo);
+    @PUT("/api/posts/{postNo}/{comments}")
+    Call<PostItem> addComments(@Path("postNo")int postNo, @Path("comments") int comments);
 
-    @PUT("/api/posts/hits/{postNo}")
-    Call<PostItem> addHits(@Path("postNo")int postNo);
-
-    @DELETE("/api/posts/remove/{postNo}")
-    Call<PostItem> deletePost(@Path("postNo")int postNo);
+    @PUT("/api/posts/{postNo}/{hits}")
+    Call<PostItem> addHits(@Path("postNo")int postNo, @Path("hits") int hits);
 
     @FormUrlEncoded
-    @POST("/api/users/sign")
-    Call<Object> signAccount(@Field("nickname") String nickname,
-                             @Field("email") String email,
-                             @Field("profileUrl") String profileUrl);
-    @DELETE("api/users/{email}")
-    Call<Object> deleteAccount(@Path("email") String email);
+    @HTTP(method = "DELETE", hasBody = true, path="/api/posts/{postNo}")
+    Call<PostItem> deletePost(@Path("postNo")int postNo, @Field("count") int count);
 
+    @FormUrlEncoded
+    @POST("/api/users")
+    Call<UserInfo> signAccount(
+            @Field("userId") long userId,
+            @Field("nickname") String nickname,
+            @Field("email") String email,
+            @Field("profileUrl") String profileUrl);
 
+    @DELETE("/api/users/{userId}")
+    Call<JsonArray> deleteAccount(
+            @Path("userId") long userId);
 }

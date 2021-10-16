@@ -3,6 +3,8 @@ package com.androidtest.navilogin;
 import com.google.gson.annotations.SerializedName;
 
 public class PostItem {
+    @SerializedName("userId")
+    private long userId; // 유저테이블 참조키
     @SerializedName("postNo")
     private int postNo; //글번호
     @SerializedName("title")
@@ -19,6 +21,14 @@ public class PostItem {
     private int comments;//댓글수
     @SerializedName("likes")
     private int likes;//추천수
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
 
     public int getPostNo() {
         return postNo;

@@ -30,6 +30,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.androidtest.navilogin.activity.MainActivity.getUserId;
 import static com.androidtest.navilogin.activity.MainActivity.getUserName;
 
 public class WriteboxActivity extends AppCompatActivity {
@@ -38,7 +39,7 @@ public class WriteboxActivity extends AppCompatActivity {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     String write_date;
     Calendar cal  = Calendar.getInstance();
-    final static String URL = "http://172.16.61.106:3030";
+    final static String URL = "http://aaa:3030";
 
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(URL)
@@ -82,15 +83,15 @@ public class WriteboxActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.action_write:
-                int def_num = 0;//생성할때 0으로 초기화
+
                 write_date = sdf.format(cal.getTime());
                 String title = etTitle.getText().toString();
                 String description = etDesc.getText().toString();
                 String writer = getUserName();
-                int hits, comments, likes = def_num;
+                long userId = getUserId();
 
                 //retrofit start
-                Call<PostItem> call = apiService.addPost(writer, title, description, 0, 0,0, write_date);
+                Call<PostItem> call = apiService.addPost(userId ,writer, title, description, 0, 0,0, write_date);
                 call.enqueue(new Callback<PostItem>() {
                     @Override
                     public void onResponse(Call<PostItem> call, Response<PostItem> response) {

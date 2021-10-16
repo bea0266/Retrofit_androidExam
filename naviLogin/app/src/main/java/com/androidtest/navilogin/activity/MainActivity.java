@@ -23,6 +23,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.androidtest.navilogin.ApiService;
 import com.androidtest.navilogin.UserInfo;
 import com.androidtest.navilogin.fragment.BoardFragment;
 import com.androidtest.navilogin.fragment.HomeFragment;
@@ -34,6 +35,12 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static java.sql.DriverManager.println;
 
@@ -55,6 +62,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ImageView proImg;
     static boolean isLogin=false;
     static String activityNow = "home";
+
+
+    final static String URL = "http://192.168.35.4:3030";
+
+    Retrofit retrofit = new Retrofit.Builder()
+            .baseUrl(URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build();
+
+    ApiService apiService = retrofit.create(ApiService.class);
 
 
     @Override
@@ -155,13 +172,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 userInfo.setProfileUrl(profileImg);
                 userInfo.setEmail(email);
                 userInfo.setUserId(userId);
+                Call<UserInfo> call = apiService.signAccount(userId, nickname,email, profileImg);
+                call.enqueue(new Callback<UserInfo>() {
+                    @Override
+                    public void onResponse(Call<UserInfo> call, Response<UserInfo> response) {
+                        Log.d("success", "로그인 성공");
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<UserInfo> call, Throwable t) {
+                        Log.e("error", t.getMessage());
+
+                    }
+                });
+
+
+
                 headNick.setText(nickname+"님\n어서오세요.");
-                System.out.println("userId:"+ userId);
+
                 Glide.with(this)
                         .load(profileImg)
                         .override(100,100)
                         .into(proImg);
-
 
 
             }
@@ -245,6 +278,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             activityNow="home";
 
         }
+    }
+    public static long getUserId() {
+        return userInfo.getUserId();
     }
     public static String getUserName() {
         return userInfo.getNickname();

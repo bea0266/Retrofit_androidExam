@@ -106,7 +106,7 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
     public long getItemId(int position) {
         return position;
     }
-    public void addItem(int postNo, String title, String description, String writer, String write_date,
+    public void addItem(int postNo, long userId, String title, String description, String writer, String write_date,
                         int hits, int comments, int likes){
         PostItem item = new PostItem();
 
@@ -118,6 +118,7 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
         item.setTitle(title);
         item.setComments(comments);
         item.setLikes(likes);
+        item.setUserId(userId);
 
         postData.add(item);
 

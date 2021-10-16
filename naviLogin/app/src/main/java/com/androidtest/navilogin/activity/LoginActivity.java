@@ -14,8 +14,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.androidtest.navilogin.ApiService;
 import com.androidtest.navilogin.R;
 
+import com.androidtest.navilogin.UserInfo;
 import com.kakao.auth.Session;
 import com.kakao.sdk.user.UserApiClient;
 import com.kakao.usermgmt.LoginButton;
@@ -27,10 +29,18 @@ import com.kakao.usermgmt.response.model.UserProfile;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class LoginActivity extends Activity {
 
     private LoginButton kakaoBtn; //카카오 로그인 버튼
     private KakaoLogin.KakaoSessionCallback sessionCallback;
+
+
 
 
     @Override
@@ -96,7 +106,9 @@ public class LoginActivity extends Activity {
             intent.putExtra("profileImg", kakaoImg);
             intent.putExtra("email", kakaoEmail);
 
+
             setResult(RESULT_OK, intent);
+            Log.d("userId", Long.toString(kakaoId));
             finish();
         }
     }

@@ -9,17 +9,38 @@ import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
+import com.androidtest.navilogin.ApiService;
 import com.androidtest.navilogin.R;
+import com.androidtest.navilogin.UserInfo;
 import com.androidtest.navilogin.activity.MainActivity;
+import com.google.gson.JsonArray;
 import com.kakao.network.ErrorResult;
 import com.kakao.sdk.user.UserApiClient;
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.LogoutResponseCallback;
 import com.kakao.usermgmt.callback.UnLinkResponseCallback;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+import static com.androidtest.navilogin.activity.MainActivity.getUserId;
+
 public class SettingsFragment extends PreferenceFragmentCompat {
     Preference logoutPreference, withdrawPreference;
     MainActivity mainActivity;
+
+    final static String URL = "http://aaa:3030";
+
+    Retrofit retrofit = new Retrofit.Builder()
+            .baseUrl(URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build();
+
+    ApiService apiService = retrofit.create(ApiService.class);
+
 
     public static SettingsFragment newInstance() {
        SettingsFragment fragment = new SettingsFragment();
@@ -61,10 +82,22 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
                     @Override
                     public void onSuccess(Long result) {
-                        Toast.makeText(getActivity(), "탈퇴가 완료되었습니다.", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getActivity(), MainActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
+                        Call<JsonArray> call = apiService.deleteAccount(getUserId());
+                        call.enqueue(new Callback<JsonArray>() {
+                            @Override
+                            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                                Toast.makeText(getActivity(), "탈퇴가 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(getActivity(), MainActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                            }
+
+                            @Override
+                            public void onFailure(Call<JsonArray> call, Throwable t) {
+                                Log.e("error", t.getMessage());
+                            }
+                        });
+
                     }
                 });
 
