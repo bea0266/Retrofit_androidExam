@@ -26,13 +26,14 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.androidtest.navilogin.activity.MainActivity.URL;
 import static com.androidtest.navilogin.activity.MainActivity.getUserId;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
     Preference logoutPreference, withdrawPreference;
     MainActivity mainActivity;
 
-    final static String URL = "http://aaa:3030";
+
 
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(URL)

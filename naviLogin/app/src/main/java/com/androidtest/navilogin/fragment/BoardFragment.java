@@ -39,6 +39,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.app.Activity.RESULT_OK;
+import static com.androidtest.navilogin.activity.MainActivity.URL;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,7 +49,7 @@ import static android.app.Activity.RESULT_OK;
 public class BoardFragment extends Fragment {
 
     BoardAdapter boardAdapter;
-    final static String URL = "http://aaa:3030";
+
 
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(URL)
