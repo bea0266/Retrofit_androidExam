@@ -94,8 +94,23 @@ public class BoardFragment extends Fragment {
            @Override
            public void onItemClick(View v, int position) {
               Intent intent = new Intent(getActivity(), DetailActivity.class);
-              intent.putExtra("postNo", boardAdapter.getItem(position).getPostNo());
-              startActivity(intent);
+              int postNo = boardAdapter.getItem(position).getPostNo();
+              intent.putExtra("postNo", postNo);
+              Call<PostItem> call = apiService.addHits(postNo); //클릭 시 조회수 증가
+              call.enqueue(new Callback<PostItem>() {
+                  @Override
+                  public void onResponse(Call<PostItem> call, Response<PostItem> response) {
+                      Log.d("addhits", "success");
+                  }
+
+                  @Override
+                  public void onFailure(Call<PostItem> call, Throwable t) {
+                    Log.d("error", t.getMessage());
+                  }
+              });
+               startActivity(intent);
+
+
            }
        });
 
@@ -113,7 +128,7 @@ public class BoardFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
+        boardAdapter.notifyDataSetChanged();
         Call<ResponseBody> call = apiService.getPosts();
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -123,6 +138,8 @@ public class BoardFragment extends Fragment {
                     Log.d("responseData", responseData);
 
                     if (responseData.equals("[]")) {
+                        boardAdapter.listCleaner();
+                        boardAdapter.notifyDataSetChanged();
 
                     } else {
                         boardAdapter.listCleaner();

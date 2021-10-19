@@ -1,6 +1,7 @@
 package com.androidtest.navilogin;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import java.util.List;
 
@@ -43,18 +44,18 @@ public interface ApiService {
             @Field("description") String description,
             @Field("write_date") String write_date);
 
-    @PUT("/api/posts/{postNo}/{likes}")
-    Call<PostItem> addLike(@Path("postNo") int postNo, @Path("likes") int likes);
+    @PUT("/api/posts/{postNo}/likes")
+    Call<PostItem> addLike(@Path("postNo") int postNo);
 
-    @PUT("/api/posts/{postNo}/{comments}")
-    Call<PostItem> addComments(@Path("postNo")int postNo, @Path("comments") int comments);
+    @PUT("/api/posts/{postNo}/comments")
+    Call<PostItem> addComments(@Path("postNo")int postNo);
 
-    @PUT("/api/posts/{postNo}/{hits}")
-    Call<PostItem> addHits(@Path("postNo")int postNo, @Path("hits") int hits);
+    @PUT("/api/posts/{postNo}/hits")
+    Call<PostItem> addHits(@Path("postNo")int postNo);
 
-    @FormUrlEncoded
-    @HTTP(method = "DELETE", hasBody = true, path="/api/posts/{postNo}")
-    Call<PostItem> deletePost(@Path("postNo")int postNo, @Field("count") int count);
+
+    @DELETE("/api/posts/{postNo}")
+    Call<PostItem> deletePost(@Path("postNo")int postNo);
 
     @FormUrlEncoded
     @POST("/api/users")
@@ -65,6 +66,6 @@ public interface ApiService {
             @Field("profileUrl") String profileUrl);
 
     @DELETE("/api/users/{userId}")
-    Call<JsonArray> deleteAccount(
+    Call<JsonObject> deleteAccount(
             @Path("userId") long userId);
 }

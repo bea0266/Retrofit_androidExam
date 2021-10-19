@@ -14,6 +14,7 @@ import com.androidtest.navilogin.R;
 import com.androidtest.navilogin.UserInfo;
 import com.androidtest.navilogin.activity.MainActivity;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.kakao.network.ErrorResult;
 import com.kakao.sdk.user.UserApiClient;
 import com.kakao.usermgmt.UserManagement;
@@ -83,10 +84,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
                     @Override
                     public void onSuccess(Long result) {
-                        Call<JsonArray> call = apiService.deleteAccount(getUserId());
-                        call.enqueue(new Callback<JsonArray>() {
+                        Call<JsonObject> call = apiService.deleteAccount(getUserId());
+                        call.enqueue(new Callback<JsonObject>() {
                             @Override
-                            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                                 Toast.makeText(getActivity(), "탈퇴가 완료되었습니다.", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(getActivity(), MainActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -94,7 +95,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                             }
 
                             @Override
-                            public void onFailure(Call<JsonArray> call, Throwable t) {
+                            public void onFailure(Call<JsonObject> call, Throwable t) {
                                 Log.e("error", t.getMessage());
                             }
                         });

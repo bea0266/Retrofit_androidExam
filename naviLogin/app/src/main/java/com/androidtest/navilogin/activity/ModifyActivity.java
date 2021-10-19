@@ -1,27 +1,21 @@
 package com.androidtest.navilogin.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.androidtest.navilogin.ApiService;
 import com.androidtest.navilogin.PostItem;
 import com.androidtest.navilogin.R;
-import com.androidtest.navilogin.fragment.BoardFragment;
-import com.kakao.sdk.user.model.Profile;
-import com.kakao.usermgmt.response.model.UserAccount;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -36,13 +30,18 @@ import static com.androidtest.navilogin.activity.MainActivity.URL;
 import static com.androidtest.navilogin.activity.MainActivity.getUserId;
 import static com.androidtest.navilogin.activity.MainActivity.getUserName;
 
-public class WriteboxActivity extends AppCompatActivity {
-    private ActionBar actionBar;
+/*
+    수정 화면 액티비티
+ */
+public class ModifyActivity extends AppCompatActivity {
     EditText etTitle, etDesc;
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     String write_date;
     Calendar cal  = Calendar.getInstance();
-    String chTitle, chDesc;
+    String title, description, chTitle, chDesc;;
+    int postNo;
+    Toolbar toolbar;
+
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -50,33 +49,30 @@ public class WriteboxActivity extends AppCompatActivity {
 
     ApiService apiService = retrofit.create(ApiService.class);
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_writebox);
-
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        setContentView(R.layout.activity_modifybox);
         etTitle = (EditText) findViewById(R.id.etTitle);
         etDesc = (EditText) findViewById(R.id.etDesc);
+        toolbar = (Toolbar)findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
-        actionBar=getSupportActionBar();
 
-        actionBar.setTitle("게시글 작성");
+        Intent intent = getIntent();
+        title = intent.getStringExtra("title");
+        description = intent.getStringExtra("description");
+        postNo = intent.getIntExtra("postNo", 1);
 
-        etTitle.setOnKeyListener(new View.OnKeyListener() { //엔터키 입력 방지
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == event.KEYCODE_ENTER)
-                    return true;
+        etTitle.setText(title);
+        etDesc.setText(description);
 
-                return false;
-            }
-        });
 
 
 
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -92,30 +88,33 @@ public class WriteboxActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.action_write:
-
-                write_date = sdf.format(cal.getTime());
-                String title = etTitle.getText().toString();
-                String description = etDesc.getText().toString();
-                String writer = getUserName();
-                long userId = getUserId();
+                //retrofit start
+                Intent intent = new Intent(getApplicationContext(), DetailActivity.class);
+                title =  etTitle.getText().toString();
+                description = etDesc.getText().toString();
 
                 if(title.indexOf("\'")!=-1){
 
-                   chTitle = title.replaceAll("'", "\'\'");
+                    chTitle = title.replaceAll("'", "\'\'");
                 } else chTitle = title;
 
                 if(description.indexOf("\'")!=-1){
 
-                       chDesc = description.replaceAll("\'","\'\'");
+                    chDesc = description.replaceAll("\'","\'\'");
                 } else chDesc = description;
 
 
-                //retrofit start
-                Call<PostItem> call = apiService.addPost(userId ,writer, chTitle, chDesc, 0, 0,0, write_date);
+                intent.putExtra("title", title);
+                intent.putExtra("description", description);
+                write_date = sdf.format(cal.getTime());
+                intent.putExtra("write_date", write_date);
+                Call<PostItem> call = apiService.updatePost(postNo, chTitle, chDesc, write_date);
                 call.enqueue(new Callback<PostItem>() {
                     @Override
                     public void onResponse(Call<PostItem> call, Response<PostItem> response) {
-                        Log.d("result", chTitle+","+chDesc);
+
+                        Log.d("result", Boolean.toString(response.isSuccessful()));
+
                     }
 
                     @Override
@@ -123,9 +122,12 @@ public class WriteboxActivity extends AppCompatActivity {
                         Log.e("error", t.getMessage());
                     }
                 });
-
+                setResult(RESULT_OK,intent);
                 finish();
+
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }
