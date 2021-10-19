@@ -32,6 +32,7 @@
             android:textSize="18dp" />
 
         <TextView
+            android:id="@+id/tvDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -44,6 +45,7 @@
             android:text="2021-10-15 00:00:00" />
 
         <TextView
+            android:id="@+id/tvWriter"
             android:layout_width="159dp"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -61,6 +63,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <TextView
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"

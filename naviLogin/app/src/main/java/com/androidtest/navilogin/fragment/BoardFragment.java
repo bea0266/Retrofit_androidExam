@@ -94,6 +94,7 @@ public class BoardFragment extends Fragment {
            @Override
            public void onItemClick(View v, int position) {
               Intent intent = new Intent(getActivity(), DetailActivity.class);
+              intent.putExtra("postNo", boardAdapter.getItem(position).getPostNo());
               startActivity(intent);
            }
        });
