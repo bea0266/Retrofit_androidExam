@@ -22,25 +22,22 @@
         android:id="@+id/tvContents"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10sp"
-        android:layout_marginTop="8dp"
-
+        android:layout_margin="10dp"
+        android:layout_marginTop="32dp"
         android:text="댓글 내용이 들어갈 자리입니다."
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.476"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvComWriter" />
+        app:layout_constraintTop_toBottomOf="@+id/tvCommWriter"
+        tools:layout_editor_absoluteX="10dp" />
 
     <TextView
         android:id="@+id/tvCommWriteDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="44dp"
         android:text="2021-10-10 16:00:00"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.958"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/tvContents"
+        app:layout_constraintHorizontal_bias="0.979"
+        app:layout_constraintStart_toStartOf="@+id/tvContents"
         app:layout_constraintTop_toBottomOf="@+id/tvContents" />
 
 

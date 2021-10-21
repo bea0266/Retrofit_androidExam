@@ -24,6 +24,13 @@ public interface ApiService {
     @GET("/api/posts/{postNo}")
     Call<ResponseBody> getPostinfo(@Path("postNo") int postNo);
 
+    @GET("/api/posts/{postNo}/comments")
+    Call<ResponseBody> getComment(@Path("postNo") int postNo);
+
+
+
+
+
     @FormUrlEncoded
     @POST("/api/posts")
     Call<PostItem> addPost(
@@ -37,12 +44,27 @@ public interface ApiService {
             @Field ("write_date")String write_date);
 
     @FormUrlEncoded
+    @POST("/api/posts/{postNo}/comments")
+    Call<CommentItem> addComment(
+            @Path("postNo") int postNo,
+            @Field("commWriter")String commWriter,
+            @Field ("contents")String contents,
+            @Field ("commWriteDate")String commWriteDate);
+
+
+
+
+    @FormUrlEncoded
     @PUT("/api/posts/{postNo}")
     Call<PostItem> updatePost(
             @Path("postNo") int postNo,
             @Field("title") String title,
             @Field("description") String description,
             @Field("write_date") String write_date);
+
+
+
+
 
     @PUT("/api/posts/{postNo}/likes")
     Call<PostItem> addLike(@Path("postNo") int postNo);

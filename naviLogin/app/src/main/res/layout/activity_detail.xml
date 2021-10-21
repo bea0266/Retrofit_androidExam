@@ -138,7 +138,7 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/etRegist"
+            android:id="@+id/etComment"
             android:layout_width="325dp"
             android:layout_height="wrap_content"
             android:hint="댓글입력" />

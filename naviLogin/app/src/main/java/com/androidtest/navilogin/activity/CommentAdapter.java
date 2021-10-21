@@ -1,23 +1,22 @@
-package com.androidtest.navilogin;
+package com.androidtest.navilogin.activity;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.androidtest.navilogin.CommentItem;
+import com.androidtest.navilogin.R;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHolder>{
 
     private CommentAdapter.OnItemClickListener mListener = null;
-    private ArrayList<PostItem> commData = null;
+    private ArrayList<CommentItem> commData = null;
     public interface OnItemClickListener {
         void onItemClick(View v, int position);
 
@@ -33,7 +32,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             super(itemView);
 
 
-
+            tvContent = (TextView) itemView.findViewById(R.id.tvContents);
             tvCommWriter = (TextView) itemView.findViewById(R.id.tvCommWriter);
             tvCommWriteDate = (TextView) itemView.findViewById(R.id.tvCommWriteDate);
 
@@ -51,13 +50,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     }
 
-    CommentAdapter(ArrayList<PostItem> list) {
+    CommentAdapter(ArrayList<CommentItem> list) {
         commData = list ;
     }
 
     @Override
     public CommentAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_comment,parent,false);
         CommentAdapter.ViewHolder holder = new CommentAdapter.ViewHolder(view);
 
         return holder ;
@@ -67,57 +66,42 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(CommentAdapter.ViewHolder holder, int position) {
-        PostItem postItems = postData.get(position);
-        holder.tvTitle.setText(postItems.getTitle());
-        holder.tvHits.setText("조회수 "+postItems.getHits());
-        holder.tvWriter.setText(postItems.getWriter());
+        CommentItem commentItems = commData.get(position);
+        holder.tvCommWriter.setText(commentItems.getCommWriter());
+        holder.tvCommWriteDate.setText(commentItems.getCommWriteDate());
+        holder.tvContent.setText(commentItems.getContents());
 
     }
 
     @Override
     public int getItemCount() {
-        return postData.size() ;
+        return commData.size() ;
     }
-    public PostItem getItem(int position){
-        return postData.get(position);
+    public CommentItem getItem(int position){
+        return commData.get(position);
     }
     public void removeItem(int position){
-        postData.remove(position);
+        commData.remove(position);
     }
-    public void swapItem(int cnt){
 
-//커밋 이후 작성할 코드
-        for(int i=cnt-1; i>0; i-- )
-            Collections.swap(postData, i, i-1 );
-        for(int i=0; i<postData.size(); i++) {
-            Log.d("listorder", "listorder[" + i + "]" + postData.get(i).getTitle());
-        }
-
-    }
     public void listCleaner(){
 
-        postData.clear();
+       commData.clear();
 
     }
     @Override
     public long getItemId(int position) {
         return position;
     }
-    public void addItem(int postNo, long userId, String title, String description, String writer, String write_date,
-                        int hits, int comments, int likes){
-        PostItem item = new PostItem();
+    public void addItem(int commNo ,int postNo,  String commWriter, String commWriteDate, String contents){
+        CommentItem item = new CommentItem();
 
         item.setPostNo(postNo);
-        item.setWrite_date(write_date);
-        item.setDescription(description);
-        item.setWriter(writer);
-        item.setHits(hits);
-        item.setTitle(title);
-        item.setComments(comments);
-        item.setLikes(likes);
-        item.setUserId(userId);
-
-        postData.add(item);
+        item.setCommNo(commNo);
+        item.setCommWriteDate(commWriteDate);
+        item.setCommWriter(commWriter);
+        item.setContents(contents);
+        commData.add(item);
 
 
     }

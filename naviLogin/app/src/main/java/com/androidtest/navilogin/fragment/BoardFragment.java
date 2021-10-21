@@ -40,6 +40,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.app.Activity.RESULT_OK;
 import static com.androidtest.navilogin.activity.MainActivity.URL;
+import static com.androidtest.navilogin.activity.MainActivity.userInfo;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -96,6 +97,7 @@ public class BoardFragment extends Fragment {
               Intent intent = new Intent(getActivity(), DetailActivity.class);
               int postNo = boardAdapter.getItem(position).getPostNo();
               intent.putExtra("postNo", postNo);
+              intent.putExtra("userName", userInfo.getNickname());
               Call<PostItem> call = apiService.addHits(postNo); //클릭 시 조회수 증가
               call.enqueue(new Callback<PostItem>() {
                   @Override

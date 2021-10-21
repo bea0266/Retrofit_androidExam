@@ -18,20 +18,22 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.androidtest.navilogin.ApiService;
+import com.androidtest.navilogin.CommentItem;
 import com.androidtest.navilogin.PostItem;
 import com.androidtest.navilogin.R;
-import com.androidtest.navilogin.UserInfo;
-import com.androidtest.navilogin.fragment.BoardFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.zip.Inflater;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -44,17 +46,70 @@ import static com.androidtest.navilogin.activity.MainActivity.URL;
 
 public class DetailActivity extends AppCompatActivity {
     ActionBar actionBar;
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    Calendar cal  = Calendar.getInstance();
     TextView tvTitle, tvWriter, tvDesc, tvHits, tvLikes, tvComments,tvDate;
     EditText etComment; //댓글작성창(나중에 구현)
     RecyclerView recycleComment; // 나중에 구현
     Button btnRegist, btnLike; // 나중에 구현
+    CommentAdapter commentAdapter;
     int postNo;
+    String commWriter;
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 
     ApiService apiService = retrofit.create(ApiService.class);
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        commentAdapter.notifyDataSetChanged();
+        Call<ResponseBody> call = apiService.getComment(postNo); //댓글을 불러온다.
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                try {
+                    String responseData = response.body().string();
+                    Log.d("responseData", responseData);
+                    if(responseData.length()==0){
+                       commentAdapter.listCleaner();
+                       commentAdapter.notifyDataSetChanged();
+                    } else {
+
+                        commentAdapter.listCleaner();
+                        JSONArray jsonArray = new JSONArray(responseData);
+                        for (int i = 0; i < jsonArray.length(); i++) {
+
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            int postNo = jsonObject.getInt("postNo");
+                            int commNo = jsonObject.getInt("commNo");
+                            String commWriter = jsonObject.getString("commWriter");
+                            String commWriteDate = jsonObject.getString("commWriteDate");
+                            String contents = jsonObject.getString("contents");
+
+                            commentAdapter.addItem(commNo, postNo, commWriter, commWriteDate, contents);
+                            commentAdapter.notifyDataSetChanged();
+                            Log.d("itemadd", "add comment item : commNo:"+commNo+", postNo:"+postNo+", commWriter:"+commWriter
+                            +" commWriteDate:"+commWriteDate+", contents:"+contents);
+                        }
+
+
+                    }
+                } catch (IOException | JSONException e) {
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d("error", t.getMessage());
+            }
+        });
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,15 +123,54 @@ public class DetailActivity extends AppCompatActivity {
         tvComments = (TextView) findViewById(R.id.tvComments);
         tvDate = (TextView) findViewById(R.id.tvDate);
         btnLike = (Button) findViewById(R.id.btnLike);
+        btnRegist = (Button) findViewById(R.id.btnRegist);
+        etComment = (EditText) findViewById(R.id.etComment);
+        recycleComment = (RecyclerView) findViewById(R.id.recycleComment);
+
+        recycleComment.setLayoutManager(new LinearLayoutManager(getApplicationContext())); // 레이아웃매니저 설정
+        ArrayList<CommentItem> list = new ArrayList<>(); //댓글클래스를 제네릭스로 가지는 리스트 구현
+        commentAdapter = new CommentAdapter(list); // 어댑터 생성 및 리스트 부착
+        recycleComment.setAdapter(commentAdapter); // 어댑터 사용 가능
+
+
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         actionBar=getSupportActionBar();
 
 
-
         Intent intent = getIntent();
         postNo = intent.getIntExtra("postNo",1 );
+        commWriter = intent.getStringExtra("userName");
+
+
+        btnRegist.setOnClickListener(new View.OnClickListener() { // 댓글을 등록할때
+            @Override
+            public void onClick(View v) {
+                String commWriteDate = sdf.format(cal.getTime());
+                String comment = etComment.getText().toString();
+                Call<CommentItem> call = apiService.addComment(postNo, commWriter, comment, commWriteDate);
+                call.enqueue(new Callback<CommentItem>() {
+                    @Override
+                    public void onResponse(Call<CommentItem> call, Response<CommentItem> response) {
+                        Log.d("addComment", "postNo: "+postNo+" comment++");
+                        finish();//인텐트 종료
+                        // overridePendingTransition(0, 0);//인텐트 효과 없애기
+                        Intent intent = getIntent(); //인텐트
+                        startActivity(intent); //액티비티 열기
+                        //  overridePendingTransition(0, 0);//인텐트 효과 없애기
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<CommentItem> call, Throwable t) {
+                        Log.d("error", t.getMessage());
+                    }
+                });
+
+            }
+        });
+
 
         btnLike.setOnClickListener(new View.OnClickListener() { //좋아요 누를때
             @Override
