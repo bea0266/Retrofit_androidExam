@@ -4,6 +4,7 @@ package com.androidtest.navilogin.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,6 +53,10 @@ public class DetailActivity extends AppCompatActivity {
     ActionBar actionBar;
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     LinearLayout layoutFill, layoutBottom;
+    ImageButton btnMore;
+
+
+
     Calendar cal  = Calendar.getInstance();
     TextView tvTitle, tvWriter, tvDesc, tvHits, tvLikes, tvComments,tvDate;
     EditText etComment; //댓글작성창(나중에 구현)
@@ -75,7 +81,7 @@ public class DetailActivity extends AppCompatActivity {
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
-
+        btnMore = (ImageButton) findViewById(R.id.btnMore);
         layoutBottom = (LinearLayout) findViewById(R.id.bottom);
         layoutFill = (LinearLayout) findViewById(R.id.layoutFill);
         tvTitle = (TextView) findViewById(R.id.tvTitle);
@@ -92,7 +98,7 @@ public class DetailActivity extends AppCompatActivity {
 
         recycleComment.setLayoutManager(new LinearLayoutManager(getApplicationContext())); // 레이아웃매니저 설정
         ArrayList<CommentItem> list = new ArrayList<>(); //댓글클래스를 제네릭스로 가지는 리스트 구현
-        commentAdapter = new CommentAdapter(list); // 어댑터 생성 및 리스트 부착
+        commentAdapter = new CommentAdapter(list, this); // 어댑터 생성 및 리스트 부착
         recycleComment.setAdapter(commentAdapter); // 어댑터 사용 가능
 
 
@@ -108,12 +114,17 @@ public class DetailActivity extends AppCompatActivity {
 
 
 
-
         btnRegist.setOnClickListener(new View.OnClickListener() { // 댓글을 등록할때
             @Override
             public void onClick(View v) {
                 String commWriteDate = sdf.format(cal.getTime());
                 String comment = etComment.getText().toString();
+
+                if(comment.indexOf("\'")!=-1){
+
+                    comment = comment.replaceAll("'", "\'\'");
+                }
+
                 Call<CommentItem> call = apiService.addComment(postNo, commWriter, comment, commWriteDate);
                 call.enqueue(new Callback<CommentItem>() {
                     @Override
@@ -264,6 +275,8 @@ public class DetailActivity extends AppCompatActivity {
         return true;
     }
 
+
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch(item.getItemId()){
@@ -296,6 +309,8 @@ public class DetailActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

@@ -165,6 +165,37 @@
 
 
     </ScrollView>
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/bottomHide"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:visibility="gone"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/etModiComment"
+            android:layout_width="325dp"
+            android:layout_height="wrap_content"
+            android:hint="수정할 내용을 입력하십시오." />
+        <Button
+            android:id="@+id/btnModify"
+            android:text="수정"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+    </LinearLayout>
+
+
+
+
+
+
+
 
     <LinearLayout
         android:id="@+id/bottom"
@@ -184,6 +215,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </LinearLayout>
+
+</FrameLayout>
+
 
 
 

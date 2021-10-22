@@ -79,6 +79,9 @@ public interface ApiService {
     @DELETE("/api/posts/{postNo}")
     Call<PostItem> deletePost(@Path("postNo")int postNo);
 
+    @DELETE("/api/posts/{postNo}/comments/{commNo}")
+    Call<List<CommentItem>> deleteComment(@Path("postNo") int postNo ,  @Path("commNo") int commNo);
+
     @FormUrlEncoded
     @POST("/api/users")
     Call<UserInfo> signAccount(
