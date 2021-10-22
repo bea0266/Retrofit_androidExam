@@ -41,7 +41,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.WriteboxActivity"/>
-        <activity android:name=".activity.DetailActivity"/>
+        <activity android:name=".activity.DetailActivity"  android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".activity.ModifyActivity" />
     </application>
 

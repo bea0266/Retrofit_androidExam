@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     static String activityNow = "home";
 
 
-    public final static String URL = "http://172.16.61.106:3030";
+    public final static String URL = "http://localhost:3030";
 
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(URL)

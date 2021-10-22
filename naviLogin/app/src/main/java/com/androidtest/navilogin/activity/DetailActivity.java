@@ -7,9 +7,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +50,7 @@ import static com.androidtest.navilogin.activity.MainActivity.URL;
 public class DetailActivity extends AppCompatActivity {
     ActionBar actionBar;
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    LinearLayout layoutFill, layoutBottom;
     Calendar cal  = Calendar.getInstance();
     TextView tvTitle, tvWriter, tvDesc, tvHits, tvLikes, tvComments,tvDate;
     EditText etComment; //댓글작성창(나중에 구현)
@@ -62,59 +66,18 @@ public class DetailActivity extends AppCompatActivity {
 
     ApiService apiService = retrofit.create(ApiService.class);
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        commentAdapter.notifyDataSetChanged();
-        Call<ResponseBody> call = apiService.getComment(postNo); //댓글을 불러온다.
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
-                try {
-                    String responseData = response.body().string();
-                    Log.d("responseData", responseData);
-                    if(responseData.length()==0){
-                       commentAdapter.listCleaner();
-                       commentAdapter.notifyDataSetChanged();
-                    } else {
-
-                        commentAdapter.listCleaner();
-                        JSONArray jsonArray = new JSONArray(responseData);
-                        for (int i = 0; i < jsonArray.length(); i++) {
-
-                            JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            int postNo = jsonObject.getInt("postNo");
-                            int commNo = jsonObject.getInt("commNo");
-                            String commWriter = jsonObject.getString("commWriter");
-                            String commWriteDate = jsonObject.getString("commWriteDate");
-                            String contents = jsonObject.getString("contents");
-
-                            commentAdapter.addItem(commNo, postNo, commWriter, commWriteDate, contents);
-                            commentAdapter.notifyDataSetChanged();
-                            Log.d("itemadd", "add comment item : commNo:"+commNo+", postNo:"+postNo+", commWriter:"+commWriter
-                            +" commWriteDate:"+commWriteDate+", contents:"+contents);
-                        }
-
-
-                    }
-                } catch (IOException | JSONException e) {
-
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.d("error", t.getMessage());
-            }
-        });
-    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
+
+        layoutBottom = (LinearLayout) findViewById(R.id.bottom);
+        layoutFill = (LinearLayout) findViewById(R.id.layoutFill);
         tvTitle = (TextView) findViewById(R.id.tvTitle);
         tvWriter = (TextView) findViewById(R.id.tvWriter);
         tvDesc = (TextView) findViewById(R.id.tvDesc);
@@ -144,6 +107,8 @@ public class DetailActivity extends AppCompatActivity {
         commWriter = intent.getStringExtra("userName");
 
 
+
+
         btnRegist.setOnClickListener(new View.OnClickListener() { // 댓글을 등록할때
             @Override
             public void onClick(View v) {
@@ -153,13 +118,10 @@ public class DetailActivity extends AppCompatActivity {
                 call.enqueue(new Callback<CommentItem>() {
                     @Override
                     public void onResponse(Call<CommentItem> call, Response<CommentItem> response) {
-                        Log.d("addComment", "postNo: "+postNo+" comment++");
-                        finish();//인텐트 종료
-                        // overridePendingTransition(0, 0);//인텐트 효과 없애기
-                        Intent intent = getIntent(); //인텐트
-                        startActivity(intent); //액티비티 열기
-                        //  overridePendingTransition(0, 0);//인텐트 효과 없애기
 
+
+                        Toast.makeText(getApplicationContext(), "댓글을 추가하였습니다.", Toast.LENGTH_SHORT).show();
+                        Log.d("addComment", "postNo: "+postNo+" comment++");
                     }
 
                     @Override
@@ -167,6 +129,14 @@ public class DetailActivity extends AppCompatActivity {
                         Log.d("error", t.getMessage());
                     }
                 });
+
+
+
+                finish();//인텐트 종료
+                overridePendingTransition(0, 0);//인텐트 효과 없애기
+                Intent intent = getIntent(); //인텐트
+                startActivity(intent); //액티비티 열기
+                overridePendingTransition(0, 0);//인텐트 효과 없애기
 
             }
         });
@@ -240,6 +210,50 @@ public class DetailActivity extends AppCompatActivity {
 
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        commentAdapter.notifyDataSetChanged();
+        Call<ResponseBody> call = apiService.getComment(postNo); //댓글을 불러온다.
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                try {
+                    String responseData = response.body().string();
+                    Log.d("responseData", responseData);
+                    if(responseData.length()>0){
+                        commentAdapter.listCleaner();
+                        JSONArray jsonArray = new JSONArray(responseData);
+                        for (int i = 0; i < jsonArray.length(); i++) {
+
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            int postNo = jsonObject.getInt("postNo");
+                            int commNo = jsonObject.getInt("commNo");
+                            String commWriter = jsonObject.getString("commWriter");
+                            String commWriteDate = jsonObject.getString("commWriteDate");
+                            String contents = jsonObject.getString("contents");
+
+                            commentAdapter.addItem(commNo, postNo, commWriter, commWriteDate, contents);
+                            commentAdapter.notifyDataSetChanged();
+                            Log.d("itemadd", "add comment item : commNo:"+commNo+", postNo:"+postNo+", commWriter:"+commWriter
+                                    +" commWriteDate:"+commWriteDate+", contents:"+contents);
+                        }
+                    }
+                } catch (IOException | JSONException e) {
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d("error", t.getMessage());
+            }
+        });
+    }
+
 
 
 
