@@ -32,7 +32,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.androidtest.navilogin.activity.MainActivity.URL;
+
+import static com.androidtest.navilogin.activity.MainActivity.createRetrofit;
 import static com.androidtest.navilogin.activity.MainActivity.getUserId;
 import static com.androidtest.navilogin.activity.MainActivity.getUserName;
 
@@ -43,12 +44,9 @@ public class WriteboxActivity extends AppCompatActivity {
     String write_date;
     Calendar cal  = Calendar.getInstance();
     String chTitle, chDesc;
-    Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl(URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build();
 
-    ApiService apiService = retrofit.create(ApiService.class);
+
+    ApiService apiService = createRetrofit();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

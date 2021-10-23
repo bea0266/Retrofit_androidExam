@@ -33,6 +33,7 @@ import com.androidtest.navilogin.R;
 import com.androidtest.navilogin.fragment.SettingsFragment;
 import com.bumptech.glide.Glide;
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.Gson;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -64,15 +65,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     static boolean isLogin=false;
     static String activityNow = "home";
 
+    ApiService apiService = createRetrofit();
 
-    public final static String URL = "http://localhost:3030";
 
-    Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl(URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build();
 
-    ApiService apiService = retrofit.create(ApiService.class);
+
+    public static ApiService createRetrofit(){
+        String url = "http://172.16.61.106:3030";
+        Retrofit retrofit = new Retrofit.Builder()
+
+                .baseUrl(url)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        ApiService apiService = retrofit.create(ApiService.class);
+        return apiService;
+    }
 
 
     @Override

@@ -47,7 +47,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.androidtest.navilogin.activity.MainActivity.URL;
+
+import static com.androidtest.navilogin.activity.MainActivity.createRetrofit;
 
 public class DetailActivity extends AppCompatActivity {
     ActionBar actionBar;
@@ -66,12 +67,7 @@ public class DetailActivity extends AppCompatActivity {
     int postNo;
     boolean isClicked = false; // edittext를 눌렀을때 토글
     String commWriter;
-    Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl(URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build();
-
-    ApiService apiService = retrofit.create(ApiService.class);
+    ApiService apiService = createRetrofit();
 
 
 
@@ -119,13 +115,7 @@ public class DetailActivity extends AppCompatActivity {
 
         etModiComment.setOnClickListener(new View.OnClickListener() { //수정에디트를 눌렀을 경우
             @Override
-            public void onClick(View v) {
-
-
-                isClicked = true;
-
-            }
-        });
+            public void onClick(View v) { isClicked = true; }});
 
         btnModify.setOnClickListener(new View.OnClickListener() { // 수정할 댓글을 올릴때
             @Override
@@ -316,7 +306,21 @@ public class DetailActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            String title = data.getStringExtra("title");
+            String description = data.getStringExtra("description");
+            String write_date = data.getStringExtra("write_date");
 
+            tvTitle.setText(title);
+            tvDesc.setText(description);
+            tvDate.setText(write_date);
+
+
+        }
+    }
 
 
     @Override
@@ -326,14 +330,6 @@ public class DetailActivity extends AppCompatActivity {
         return true;
     }
 
-    public void changeLayout(int pos){ //리스트의 인덱스인자
-        LinearLayout layout1 = layoutBottom;
-        LinearLayout layout2 = layoutHide;
-        selectPos = pos;
-        layout1.setVisibility(View.GONE);
-        layout2.setVisibility(View.VISIBLE);
-
-    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -370,21 +366,7 @@ public class DetailActivity extends AppCompatActivity {
 
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            String title = data.getStringExtra("title");
-            String description = data.getStringExtra("description");
-            String write_date = data.getStringExtra("write_date");
 
-            tvTitle.setText(title);
-            tvDesc.setText(description);
-            tvDate.setText(write_date);
-
-
-        }
-    }
 
     @Override
     public void onBackPressed() {
@@ -400,4 +382,14 @@ public class DetailActivity extends AppCompatActivity {
         }
 
     }
+
+    public void changeLayout(int pos){ //리스트의 인덱스인자
+        LinearLayout layout1 = layoutBottom;
+        LinearLayout layout2 = layoutHide;
+        selectPos = pos;
+        layout1.setVisibility(View.GONE);
+        layout2.setVisibility(View.VISIBLE);
+
+    }
+
 }

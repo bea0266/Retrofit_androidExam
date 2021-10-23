@@ -35,7 +35,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static androidx.test.InstrumentationRegistry.getContext;
-import static com.androidtest.navilogin.activity.MainActivity.URL;
+
+import static com.androidtest.navilogin.activity.MainActivity.createRetrofit;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHolder>  {
 
@@ -46,13 +47,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     private Context context;
     private DetailActivity activity;
     private int pos;
-
-    Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl(URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build();
-
-    ApiService apiService = retrofit.create(ApiService.class);
+    ApiService apiService = createRetrofit();
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -145,11 +140,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     }
 
-    public void getItemNo (int position){
-        int commNo = commData.get(position).getCommNo();
-        int postNo = commData.get(position).getPostNo();
-
-    }
 
     @Override
     public int getItemCount() {
@@ -160,15 +150,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     }
 
 
-    public void listCleaner(){
-
-       commData.clear();
-
-    }
+    public void listCleaner(){ commData.clear(); }
     @Override
-    public long getItemId(int position) {
-        return position;
-    }
+    public long getItemId(int position) { return position; }
     public void addItem(int commNo ,int postNo,  String commWriter, String commWriteDate, String contents){
         CommentItem item = new CommentItem();
 
