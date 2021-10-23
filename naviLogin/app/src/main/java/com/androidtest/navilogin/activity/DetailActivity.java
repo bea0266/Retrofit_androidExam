@@ -52,18 +52,19 @@ import static com.androidtest.navilogin.activity.MainActivity.URL;
 public class DetailActivity extends AppCompatActivity {
     ActionBar actionBar;
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    LinearLayout layoutFill, layoutBottom;
+    LinearLayout layoutFill, layoutBottom, layoutHide;
     ImageButton btnMore;
-
+    int selectPos; //수정할 리스트 항목
 
 
     Calendar cal  = Calendar.getInstance();
     TextView tvTitle, tvWriter, tvDesc, tvHits, tvLikes, tvComments,tvDate;
-    EditText etComment; //댓글작성창(나중에 구현)
+    EditText etComment,  etModiComment; //댓글작성창(나중에 구현)
     RecyclerView recycleComment; // 나중에 구현
-    Button btnRegist, btnLike; // 나중에 구현
+    Button btnRegist, btnLike, btnModify; // 나중에 구현
     CommentAdapter commentAdapter;
     int postNo;
+    boolean isClicked = false; // edittext를 눌렀을때 토글
     String commWriter;
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(URL)
@@ -82,6 +83,7 @@ public class DetailActivity extends AppCompatActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         btnMore = (ImageButton) findViewById(R.id.btnMore);
+        layoutHide = (LinearLayout) findViewById(R.id.bottomHide);
         layoutBottom = (LinearLayout) findViewById(R.id.bottom);
         layoutFill = (LinearLayout) findViewById(R.id.layoutFill);
         tvTitle = (TextView) findViewById(R.id.tvTitle);
@@ -93,12 +95,14 @@ public class DetailActivity extends AppCompatActivity {
         tvDate = (TextView) findViewById(R.id.tvDate);
         btnLike = (Button) findViewById(R.id.btnLike);
         btnRegist = (Button) findViewById(R.id.btnRegist);
+        btnModify = (Button) findViewById(R.id.btnModify);
         etComment = (EditText) findViewById(R.id.etComment);
+        etModiComment = (EditText) findViewById(R.id.etModiComment);
         recycleComment = (RecyclerView) findViewById(R.id.recycleComment);
 
         recycleComment.setLayoutManager(new LinearLayoutManager(getApplicationContext())); // 레이아웃매니저 설정
         ArrayList<CommentItem> list = new ArrayList<>(); //댓글클래스를 제네릭스로 가지는 리스트 구현
-        commentAdapter = new CommentAdapter(list, this); // 어댑터 생성 및 리스트 부착
+        commentAdapter = new CommentAdapter(list, this, DetailActivity.this); // 어댑터 생성 및 리스트 부착
         recycleComment.setAdapter(commentAdapter); // 어댑터 사용 가능
 
 
@@ -113,6 +117,51 @@ public class DetailActivity extends AppCompatActivity {
         commWriter = intent.getStringExtra("userName");
 
 
+        etModiComment.setOnClickListener(new View.OnClickListener() { //수정에디트를 눌렀을 경우
+            @Override
+            public void onClick(View v) {
+
+
+                isClicked = true;
+
+            }
+        });
+
+        btnModify.setOnClickListener(new View.OnClickListener() { // 수정할 댓글을 올릴때
+            @Override
+            public void onClick(View v) {
+                String comment = etModiComment.getText().toString();
+
+                int getCommNo = commentAdapter.getItem(selectPos).getCommNo();
+                int getPostNo = commentAdapter.getItem(selectPos).getPostNo();
+                String write_date = sdf.format(cal.getTime());
+                Call<CommentItem> call = apiService.updateComment(getPostNo, getCommNo, comment, write_date);
+                call.enqueue(new Callback<CommentItem>() {
+                    @Override
+                    public void onResponse(Call<CommentItem> call, Response<CommentItem> response) {
+                        Log.d("commentUpdate", "success");
+                        layoutHide.setVisibility(View.GONE);
+                        layoutBottom.setVisibility(View.VISIBLE);
+                        Toast.makeText(getApplicationContext(), "수정이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                        finish();//인텐트 종료
+                        overridePendingTransition(0, 0);//인텐트 효과 없애기
+                        Intent intent = getIntent(); //인텐트
+                        startActivity(intent); //액티비티 열기
+                        overridePendingTransition(0, 0);//인텐트 효과 없애기
+
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<CommentItem> call, Throwable t) {
+                        Log.e("CommentUPDATE error", t.getMessage());
+                        Toast.makeText(getApplicationContext(), "수정 실패 : "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+            }
+        });
 
         btnRegist.setOnClickListener(new View.OnClickListener() { // 댓글을 등록할때
             @Override
@@ -225,6 +274,8 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        layoutBottom.setVisibility(View.VISIBLE);
+        layoutHide.setVisibility(View.GONE);
         commentAdapter.notifyDataSetChanged();
         Call<ResponseBody> call = apiService.getComment(postNo); //댓글을 불러온다.
         call.enqueue(new Callback<ResponseBody>() {
@@ -260,7 +311,7 @@ public class DetailActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.d("error", t.getMessage());
+                Log.e("error", t.getMessage());
             }
         });
     }
@@ -275,7 +326,14 @@ public class DetailActivity extends AppCompatActivity {
         return true;
     }
 
+    public void changeLayout(int pos){ //리스트의 인덱스인자
+        LinearLayout layout1 = layoutBottom;
+        LinearLayout layout2 = layoutHide;
+        selectPos = pos;
+        layout1.setVisibility(View.GONE);
+        layout2.setVisibility(View.VISIBLE);
 
+    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -300,7 +358,7 @@ public class DetailActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<PostItem> call, Throwable t) {
-                        Log.d("error", t.getMessage());
+                        Log.e("error", t.getMessage());
                     }
                 });
 
@@ -326,5 +384,20 @@ public class DetailActivity extends AppCompatActivity {
 
 
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(isClicked==true){
+
+            layoutHide.setVisibility(View.GONE);
+            layoutBottom.setVisibility(View.VISIBLE);
+            isClicked = false;
+
+        }
+        else{
+            super.onBackPressed();
+        }
+
     }
 }

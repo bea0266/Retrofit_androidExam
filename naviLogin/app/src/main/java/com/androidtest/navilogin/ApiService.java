@@ -75,6 +75,10 @@ public interface ApiService {
     @PUT("/api/posts/{postNo}/hits")
     Call<PostItem> addHits(@Path("postNo")int postNo);
 
+    @FormUrlEncoded
+    @PUT("/api/posts/{postNo}/comments/{commNo}")
+    Call<CommentItem> updateComment(@Path("postNo") int postNo, @Path("commNo") int commNo,
+                                    @Field("contents") String contents, @Field("commWriteDate") String commWriteDate);
 
     @DELETE("/api/posts/{postNo}")
     Call<PostItem> deletePost(@Path("postNo")int postNo);

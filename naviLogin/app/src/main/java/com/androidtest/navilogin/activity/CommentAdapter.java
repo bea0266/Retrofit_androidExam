@@ -44,6 +44,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     private BoardAdapter.OnItemClickListener mListener = null;
     private ArrayList<CommentItem> commData = null;
     private Context context;
+    private DetailActivity activity;
     private int pos;
 
     Retrofit retrofit = new Retrofit.Builder()
@@ -90,7 +91,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
                                     @Override
                                     public void onFailure(Call<List<CommentItem>> call, Throwable t) {
-                                        Log.d("delete_fail", t.getMessage());
+                                        Log.e("delete_fail", t.getMessage());
                                         Toast.makeText(context, "삭제 실패", Toast.LENGTH_SHORT).show();
                                     }
                                 });
@@ -102,8 +103,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
                                 ((Activity)context).overridePendingTransition(0, 0); //효과 없애기
 
                                 return true;
-                            } else if(item.getItemId()==R.id.commModify){
+                            } else if (item.getItemId()==R.id.commModify){
 
+                                activity.isClicked = true;
+                                activity.changeLayout(pos);
 
 
                             }
@@ -117,9 +120,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         }
     }
 
-    CommentAdapter(ArrayList<CommentItem> list, Context context) {
+    CommentAdapter(ArrayList<CommentItem> list, Context context, DetailActivity activity) {
         commData = list ;
         this.context = context;
+        this.activity = activity;
     }
 
     @Override
