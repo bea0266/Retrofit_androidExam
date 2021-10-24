@@ -1,46 +1,41 @@
 package com.test.testviewpager;
 
+import android.app.Activity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-
 import me.relex.circleindicator.CircleIndicator3;
 
-public class MainActivity extends AppCompatActivity {
+public class PlanetSelect extends AppCompatActivity {
 
     private ViewPager2 mPager;
     private FragmentStateAdapter pagerAdapter;
-    static int num_page = 10;
-    private CircleIndicator3 mIndicator;
-    Button btnAdd;
+    int num_page = 3;
 
+    Button btnAdd;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.planet_select);
         btnAdd = (Button) findViewById(R.id.btnAdd);
 
         //ViewPager2
         mPager = findViewById(R.id.viewpager);
         //Adapter
-        pagerAdapter = new MyAdapter(this, num_page);//
+        pagerAdapter = new PlanetAdapter(this, num_page);//
         mPager.setAdapter(pagerAdapter); //어댑터 설정
         //Indicator
-        mIndicator = findViewById(R.id.indicator);
-        mIndicator.setViewPager(mPager); //인디케이터에 뷰페이저 장착
-        mIndicator.createIndicators(10,0); //인디케이터 갯수 설정 현재 인디케이터 위치 0번째
         //ViewPager Setting
         mPager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL); // 정렬 설정
         mPager.setCurrentItem(0); //2000개의 뷰페이저 아이템 중 1000번째 아이템으로 설정
@@ -59,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                mIndicator.animatePageSelected(position%num_page);
+
             }
 
 
@@ -90,21 +85,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fm = getSupportFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.add(R.id.frameView, MyFragment.newInstance(num_page));
-                ft.commit();
-            }
-        });
-
-    }
 
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+
+
+
+
     }
 }

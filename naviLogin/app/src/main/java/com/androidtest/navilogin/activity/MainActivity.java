@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     public static ApiService createRetrofit(){
-        String url = "http://172.16.61.106:3030";
+        String url = "http://localhost:3030";
         Retrofit retrofit = new Retrofit.Builder()
 
                 .baseUrl(url)
