@@ -1,6 +1,7 @@
 package com.test.testviewpager;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -22,13 +23,13 @@ public class PlanetSelect extends AppCompatActivity {
     private ViewPager2 mPager;
     private FragmentStateAdapter pagerAdapter;
     int num_page = 3;
-
-    Button btnAdd;
+    int currentPos; // 현재 위치를 반환
+    Button btnOk;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.planet_select);
-        btnAdd = (Button) findViewById(R.id.btnAdd);
+        btnOk = (Button) findViewById(R.id.btnOk);
 
         //ViewPager2
         mPager = findViewById(R.id.viewpager);
@@ -48,23 +49,15 @@ public class PlanetSelect extends AppCompatActivity {
                 super.onPageScrolled(position, positionOffset, positionOffsetPixels);
                 if (positionOffsetPixels == 0) {
                     mPager.setCurrentItem(position);
+                    currentPos = position;
                 }
             }
-
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-
             }
 
-
         });
-
-
-
-
-
-
 
         final float pageMargin= getResources().getDimensionPixelOffset(R.dimen.pageMargin);
         final float pageOffset = getResources().getDimensionPixelOffset(R.dimen.offset);
@@ -85,7 +78,15 @@ public class PlanetSelect extends AppCompatActivity {
             }
         });
 
-
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.putExtra("pos", currentPos);
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        });
 
 
 

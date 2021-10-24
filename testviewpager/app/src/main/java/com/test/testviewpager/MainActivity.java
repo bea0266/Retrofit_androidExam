@@ -1,6 +1,7 @@
 package com.test.testviewpager;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
@@ -66,7 +67,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
+    btnAdd.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(MainActivity.this, PlanetSelect.class);
+            startActivityForResult(intent,100);
+        }
+    });
 
 
 
@@ -90,18 +97,26 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fm = getSupportFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.add(R.id.frameView, MyFragment.newInstance(num_page));
-                ft.commit();
-            }
-        });
+
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK){
+
+            int pos = data.getIntExtra("pos", 0);
+            switch (pos) {
+
+                case 0 : 
+
+
+            }
+
+
+        }
+    }
 
     @Override
     protected void onResume() {

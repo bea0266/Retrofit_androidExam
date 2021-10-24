@@ -7,6 +7,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 public class PlanetAdapter extends FragmentStateAdapter {
 
+
     int mCount;
 
     public PlanetAdapter (FragmentActivity fa, int count){
@@ -17,7 +18,18 @@ public class PlanetAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        return null;
+
+        switch (position)
+        {
+            case 0:
+                return new Planet1();
+            case 1:
+                return new Planet2();
+            default:
+                return new Planet3();
+
+        }
+
     }
 
     @Override

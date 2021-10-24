@@ -10,7 +10,7 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/imgBanner"
+            android:id="@+id/imgPlanet1"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:background="@drawable/planet1"

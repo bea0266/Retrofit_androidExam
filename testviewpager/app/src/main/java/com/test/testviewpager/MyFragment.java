@@ -47,15 +47,6 @@ public class MyFragment extends Fragment {
        tvName = (TextView) view.findViewById(R.id.tvName);
        imgbanner = (ImageView) view.findViewById(R.id.imgBanner);
 
-
-       imgbanner.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               Intent intent = new Intent(getActivity(), PlanetSelect.class);
-               startActivity(intent);
-
-           }
-       });
        return view;
     }
 
