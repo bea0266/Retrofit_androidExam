@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">routinetest2</string>
+    <string name="kakao_app_key">229e3acf641ff2bef563faa0571b521a</string>
+    <string name="choose_a_page">Choose a page:</string>
+</resources>

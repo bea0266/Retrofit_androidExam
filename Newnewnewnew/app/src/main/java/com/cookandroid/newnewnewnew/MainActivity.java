@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         adapter = new PlanetAdapter();
         list = (ListView) findViewById(R.id.list1);
-        addMoon = (ImageButton) findViewById(R.id.add_moon);
+
         addPlanet = (ImageButton) findViewById(R.id.add_planet);
 
         addPlanet.setOnClickListener(new View.OnClickListener() {
@@ -33,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         list.setAdapter(adapter);
+        adapter.addItem("운동", "2021-01-01", "다짐", "지구");
+        adapter.addItem("공부", "2021-02-01", "다짐", "지구");
+        adapter.addItem("게임", "2021-03-01", "다짐", "지구");
         adapter.notifyDataSetChanged();
 
     }
