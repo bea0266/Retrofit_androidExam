@@ -6,13 +6,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Adapter;
+import android.widget.FrameLayout;
 import android.widget.TabHost;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -31,14 +35,21 @@ public class DetailPlanet extends FragmentActivity {
     int page_num = 2;
     CircleIndicator3 mIndicator;
     String[] tabItem = {"행 성", "별 자 리"};
-
+    FragmentTransaction ftFirst, ftSelected;
+    FragmentManager fm;
+    String keyword, promise;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_planet);
+        Intent intent = getIntent();
+        keyword = intent.getStringExtra("keyword");
+        promise = intent.getStringExtra("dajim");
 
+
+        fm = getSupportFragmentManager();
         planetContents = new PlanetContents();
         constallCollection = new ConstallCollection();
         adapter = new DetailAdapter(this, page_num);
@@ -52,6 +63,53 @@ public class DetailPlanet extends FragmentActivity {
         vp2.setCurrentItem(0); //현재 선택된 페이지를 설정합니다.
         vp2.setOffscreenPageLimit(2);// viewpager를 사용할 때 이전 혹은 다음페이지를 몇개까지 미리 로딩할지 정하는 함수이다.
         new TabLayoutMediator(tabs, vp2, (tab, position) -> tab.setText(tabItem[position])).attach();
+
+        fm.beginTransaction().replace(R.id.frame, planetContents, "first").commitAllowingStateLoss();
+
+        putData(keyword, promise, planetContents);
+
+
+
+        tabs.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+
+                switch (tab.getPosition()) {
+
+                    case 0:
+                        if(fm.findFragmentByTag("first")!=null) {
+                            fm.beginTransaction().show(fm.findFragmentByTag("first")).commit();
+                        }
+
+                        if(fm.findFragmentByTag("second")!=null){
+                            fm.beginTransaction().hide(fm.findFragmentByTag("second")).commit();
+                        }
+                        break;
+                    default:
+                        if(fm.findFragmentByTag("second")!=null){
+                            fm.beginTransaction().show(fm.findFragmentByTag("second")).commit();
+                        } else {
+                            fm.beginTransaction().add(R.id.frame, constallCollection, "second").commit();
+                        }
+
+                        if(fm.findFragmentByTag("first")!=null){
+                            fm.beginTransaction().hide(fm.findFragmentByTag("first")).commit();
+                        }
+
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
 
         vp2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             // 페이지가 변경되거나 점진적으로 스크롤될 때마다 호출되는 콜백을 추가합니다
@@ -96,6 +154,14 @@ public class DetailPlanet extends FragmentActivity {
 
 
 
+
+    }
+
+    public void putData(String keyword, String promise, PlanetContents pc){
+        Bundle bundle = new Bundle();
+        bundle.putString("keyword", keyword);
+        bundle.putString("promise",promise);
+        pc.setArguments(bundle);
 
     }
 }

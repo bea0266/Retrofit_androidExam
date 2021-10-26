@@ -20,26 +20,36 @@ import me.relex.circleindicator.CircleIndicator3;
 public class PlanetContents extends Fragment {
 
     ViewPager2 viewPager2;
-    MyAdapter fragmentStateAdapter;
+    MyAdapter adapter;
     CircleIndicator3 mIndicator;
-
+    String promise, keyword;
     int top_planetPage = 3;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View viewGroup = inflater.inflate(R.layout.planet_contents, container, false);
+        adapter = new MyAdapter(this, top_planetPage);
         viewPager2 = (ViewPager2) viewGroup.findViewById(R.id.viewpager);
+        viewPager2.setAdapter(adapter);
         mIndicator = (CircleIndicator3) viewGroup.findViewById(R.id.indicator);
-        fragmentStateAdapter = new MyAdapter(this, top_planetPage); // 어뎁터 페이지 수 설정
         mIndicator.setViewPager(viewPager2); //indicator와 뷰페이저 연결
         mIndicator.createIndicators(top_planetPage,0); // indicator 개수 설정
-
-
-
         viewPager2.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL); //뷰페이저 슬라이드 방향 설정
         viewPager2.setCurrentItem(0); //현재 선택된 페이지를 설정합니다.
         viewPager2.setOffscreenPageLimit(2);// viewpager를 사용할 때 이전 혹은 다음페이지를 몇개까지 미리 로딩할지 정하는 함수이다.
+
+        if(getArguments()!=null){
+            keyword = getArguments().getString("keyword");
+            promise = getArguments().getString("promise");
+            adapter.setItem(keyword,promise);
+
+        }
+
+
+
+
+
 
         viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             // 페이지가 변경되거나 점진적으로 스크롤될 때마다 호출되는 콜백을 추가합니다
@@ -57,7 +67,7 @@ public class PlanetContents extends Fragment {
             @Override
             public void onPageSelected(int position) { // 페이지 선택시
                 super.onPageSelected(position);
-                mIndicator.animatePageSelected(position%top_planetPage); // 페이지가 3개니깐 0,1,2값이 반복되서 나타나야함
+                mIndicator.animatePageSelected(position); // 페이지가 3개니깐 0,1,2값이 반복되서 나타나야함
             }
         });
 
@@ -88,5 +98,8 @@ public class PlanetContents extends Fragment {
 
         return viewGroup;
     }
+
+
+
 }
 

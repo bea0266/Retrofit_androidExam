@@ -7,12 +7,14 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/frameSize">
+        android:layout_height="180dp">
 
         <ImageView
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/constellation2"/>
+            android:layout_height="100dp"
+            android:src="@drawable/constellation2" />
 
     </RelativeLayout>
 

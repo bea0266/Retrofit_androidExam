@@ -10,10 +10,12 @@
         android:gravity="center">
 
         <Chronometer
+            android:id="@+id/chrono"
             android:layout_width="300dp"
             android:layout_height="50dp"
             android:format="경과 시간: %s"
             android:textSize="30dp"
+            android:textAlignment="center"
             android:layout_centerVertical="true"/>
 
 

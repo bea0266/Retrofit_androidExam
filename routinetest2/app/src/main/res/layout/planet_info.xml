@@ -90,7 +90,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/aWordOfPromise"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="7dp"
+                android:layout_marginTop="40dp"
                 android:background="@android:drawable/edit_text"
                 android:lines="15" />
 
