@@ -14,7 +14,7 @@ import org.w3c.dom.Text;
 
 public class FragmentPlanet extends Fragment {
     TextView tvKeyword;
-    String keyword;
+    private String keyword;
 
     @Nullable
     @Override

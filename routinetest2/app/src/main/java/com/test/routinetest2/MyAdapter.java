@@ -11,18 +11,18 @@ public class MyAdapter extends FragmentStateAdapter {
     FragmentPlanet fragPlanet = new FragmentPlanet();
     FragmentMyPromise fragMypromise = new FragmentMyPromise();
     FragmentStartDate fragStartDate = new FragmentStartDate();
-    public MyAdapter(@NonNull FragmentActivity fa, int count) {
-        super(fa);
+    public MyAdapter(@NonNull Fragment frag, int count) {
+        super(frag);
         mCount = count;
     }
 
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        int index = getRealPosition(position);
 
-        if (index == 0) return fragPlanet;
-        else if (index == 1) return fragMypromise;
+
+        if (position == 0) return fragPlanet;
+        else if (position == 1) return fragMypromise;
         else return fragStartDate;
     }
 
@@ -36,5 +36,5 @@ public class MyAdapter extends FragmentStateAdapter {
         return 3;
     }
 
-    public int getRealPosition(int position) { return position % mCount; }
+
 }
