@@ -16,8 +16,9 @@
             android:layout_alignParentTop="true"
             android:layout_centerVertical="true"
             android:layout_marginTop="0dp"
-            android:hint="나의 다짐"
+            android:text="나의 다짐"
             android:lines="10"
+            android:layout_margin="10dp"
             android:textSize="25dp" />
         <TextView
             android:id="@+id/promise"

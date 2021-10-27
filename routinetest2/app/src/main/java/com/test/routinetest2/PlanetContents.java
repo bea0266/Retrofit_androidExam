@@ -25,6 +25,8 @@ public class PlanetContents extends Fragment {
     String promise, keyword;
     int top_planetPage = 3;
 
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

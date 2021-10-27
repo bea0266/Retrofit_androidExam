@@ -7,25 +7,96 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-   <com.google.android.material.tabs.TabLayout
-       android:id="@+id/tabs"
-       android:layout_width="match_parent"
-       android:layout_height="70dp" />
 
-    <FrameLayout
-        android:id="@+id/frame"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/vp2"
+        android:layout_weight="1"
+        android:layout_height="0dp">
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_height="50dp" />
+
+        <FrameLayout
+            android:id="@+id/frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/vp2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
+        </FrameLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <FrameLayout
+            android:layout_gravity="center"
+            android:background="#232323"
+            android:id="@+id/frame2"
+            android:layout_marginTop="10dp"
+            android:layout_width="360dp"
+            android:layout_height="200dp">
+
+        </FrameLayout>
+        <TextView
+            android:id="@+id/selected"
+            android:layout_margin="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="선택한 위성:" />
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5">
+
+        <TextView
+            android:layout_margin="@dimen/spacer_small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/choose_a_page"/>
+
+        <Spinner
+            android:id="@+id/itemSpinner"
+            android:layout_margin="@dimen/spacer_small"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/add_miniPlanet"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:text="위성 추가"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/remove_miniPlanet"
+            android:layout_toLeftOf="@+id/add_miniPlanet"
+            android:layout_marginRight="10dp"
+            android:text="위성 삭제"/>
+
+    </RelativeLayout>
 
 
 
 
-    </FrameLayout>
+
 
 
 

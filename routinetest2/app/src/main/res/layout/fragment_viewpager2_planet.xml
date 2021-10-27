@@ -19,10 +19,11 @@
             android:hint="키워드"/>
 
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/moon2"
-            android:scaleType="center"/>
+            android:layout_width="134dp"
+            android:layout_height="118dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/moon2"
+            android:scaleType="center" />
 
     </RelativeLayout>
 

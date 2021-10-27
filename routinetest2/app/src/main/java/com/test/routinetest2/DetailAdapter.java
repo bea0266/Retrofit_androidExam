@@ -15,9 +15,12 @@ public class DetailAdapter extends FragmentStateAdapter {
 
 
     int mCount;
-    public DetailAdapter(FragmentActivity fa, int count) {
+    ConstallCollection cc;
+    PlanetContents pc;
+    public DetailAdapter(FragmentActivity fa ,  int count) {
         super(fa);
         mCount = count;
+
 
     }
 

@@ -3,11 +3,17 @@ package com.test.routinetest2;
 import android.app.Activity;
 import android.app.TabActivity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.Spinner;
 import android.widget.TabHost;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,6 +29,8 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import java.util.ArrayList;
+
 import me.relex.circleindicator.CircleIndicator3;
 @SuppressWarnings("deprecation")
 public class DetailPlanet extends FragmentActivity {
@@ -32,14 +40,18 @@ public class DetailPlanet extends FragmentActivity {
     ConstallCollection constallCollection;
     DetailAdapter adapter;
     ViewPager2 vp2;
+    TextView selected;
+    Button addSatell, removeSatell;
     int page_num = 2;
     CircleIndicator3 mIndicator;
+    String text;
     String[] tabItem = {"행 성", "별 자 리"};
+    ArrayList<String> satellName;
     FragmentTransaction ftFirst, ftSelected;
     FragmentManager fm;
     String keyword, promise;
-
-
+    Spinner spinner;
+    int num = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,12 +59,52 @@ public class DetailPlanet extends FragmentActivity {
         Intent intent = getIntent();
         keyword = intent.getStringExtra("keyword");
         promise = intent.getStringExtra("dajim");
+        satellName = new ArrayList<>();
+        planetContents = new PlanetContents();
+        constallCollection = new ConstallCollection();
+        spinner = (Spinner) findViewById(R.id.itemSpinner);
+        addSatell = (Button) findViewById(R.id.add_miniPlanet);
+        removeSatell = (Button) findViewById(R.id.remove_miniPlanet);
+        selected = (TextView) findViewById(R.id.selected);
+        ArrayAdapter<String> sAdapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, satellName);
+
+        sAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(sAdapter);
+
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        removeSatell.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                satellName.remove(satellName.size()-1);
+                Toast.makeText(getApplicationContext(), "삭제하였습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
+        addSatell.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                satellName.add("satell "+num);
+                num++;
+                Toast.makeText(getApplicationContext(), "추가하였습니다.", Toast.LENGTH_SHORT).show();
+                selected.setText("선택한 위성: " +satellName.get(satellName.size()-1));
+            }
+        });
 
 
         fm = getSupportFragmentManager();
-        planetContents = new PlanetContents();
-        constallCollection = new ConstallCollection();
-        adapter = new DetailAdapter(this, page_num);
+
+        adapter = new DetailAdapter(this,  page_num);
         tabs = (TabLayout) findViewById(R.id.tabs);
         vp2 = (ViewPager2) findViewById(R.id.vp2);
 
