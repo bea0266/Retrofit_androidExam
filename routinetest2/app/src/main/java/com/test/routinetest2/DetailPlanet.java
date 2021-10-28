@@ -51,7 +51,7 @@ public class DetailPlanet extends FragmentActivity {
     FragmentManager fm;
     String keyword, promise;
     Spinner spinner;
-    int num = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,20 +84,20 @@ public class DetailPlanet extends FragmentActivity {
 
             }
         });
+
+
         removeSatell.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                satellName.remove(satellName.size()-1);
-                Toast.makeText(getApplicationContext(), "삭제하였습니다.", Toast.LENGTH_SHORT).show();
+
             }
         });
+
         addSatell.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                satellName.add("satell "+num);
-                num++;
-                Toast.makeText(getApplicationContext(), "추가하였습니다.", Toast.LENGTH_SHORT).show();
-                selected.setText("선택한 위성: " +satellName.get(satellName.size()-1));
+                Intent intent = new Intent(getApplicationContext(), SetSatellActivity.class);
+                startActivity(intent);
             }
         });
 

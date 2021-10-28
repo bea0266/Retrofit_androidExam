@@ -28,11 +28,7 @@ public class PlanetInputInfo extends Activity {
             dMonth = String.valueOf(month+1);
             dDay = String.valueOf(dayOfMonth);
 
-
-
-
         }
-
     };
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
