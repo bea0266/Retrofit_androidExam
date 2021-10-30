@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
@@ -97,7 +98,7 @@ public class DetailPlanet extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), SetSatellActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,100);
             }
         });
 
@@ -205,6 +206,26 @@ public class DetailPlanet extends FragmentActivity {
 
 
 
+
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK){
+            if(requestCode==100){
+
+
+
+
+
+
+            }
+
+
+
+        }
 
 
     }

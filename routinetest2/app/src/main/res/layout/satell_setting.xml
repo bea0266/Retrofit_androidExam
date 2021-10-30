@@ -25,6 +25,7 @@
                 android:textSize="30dp"
                 android:textStyle="bold" />
             <EditText
+                android:id="@+id/etTitle"
                 android:layout_weight="4"
                 android:layout_marginTop="5dp"
                 android:layout_width="0dp"
@@ -175,14 +176,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:orientation="vertical">
+            android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="반복 주기 선택"
+                android:text="반복 주기 선택 : "
                 android:textColor="@color/white"
                 android:textSize="20dp" />
+            <TextView
+
+                android:id="@+id/tvCycle"
+                android:textSize="20dp"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
         </LinearLayout>
 
@@ -313,7 +322,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:lines="13"
-            android:hint="실천하고 싶은 내용을 작성하세요."
+            android:hint="간단하게 규칙을 작성하세요"
             android:id="@+id/simple_rule"
             android:textSize="15dp"
             android:background="@color/white"/>
