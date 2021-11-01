@@ -52,7 +52,7 @@ public class DetailPlanet extends FragmentActivity {
     FragmentManager fm;
     String keyword, promise;
     Spinner spinner;
-
+    SatellAdapter sAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,10 +67,8 @@ public class DetailPlanet extends FragmentActivity {
         addSatell = (Button) findViewById(R.id.add_miniPlanet);
         removeSatell = (Button) findViewById(R.id.remove_miniPlanet);
         selected = (TextView) findViewById(R.id.selected);
-        ArrayAdapter<String> sAdapter = new ArrayAdapter<String>(
-                this, android.R.layout.simple_spinner_item, satellName);
 
-        sAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sAdapter = new SatellAdapter(this);
         spinner.setAdapter(sAdapter);
 
 
@@ -216,9 +214,16 @@ public class DetailPlanet extends FragmentActivity {
         if(resultCode==RESULT_OK){
             if(requestCode==100){
 
+                String name = data.getStringExtra("name");
+                String rule = data.getStringExtra("rule");
+                String startDate = data.getStringExtra("startDate");
+                String endDate = data.getStringExtra("endDate");
+                String startTime = data.getStringExtra("startTime");
+                String endTime = data.getStringExtra("endTime");
+                String cycle = data.getStringExtra("cycle");
 
-
-
+                sAdapter.addItem(name, rule, startDate, endDate, startTime, endTime, cycle);
+                sAdapter.notifyDataSetChanged();
 
 
             }

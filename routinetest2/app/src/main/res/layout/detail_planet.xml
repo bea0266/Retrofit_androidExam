@@ -63,6 +63,7 @@
 
         <Spinner
             android:id="@+id/itemSpinner"
+            android:spinnerMode="dropdown"
             android:layout_margin="@dimen/spacer_small"
             android:layout_width="0dp"
             android:layout_weight="1"

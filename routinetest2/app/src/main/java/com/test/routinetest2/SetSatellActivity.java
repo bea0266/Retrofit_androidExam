@@ -6,6 +6,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -22,7 +23,10 @@ import androidx.fragment.app.DialogFragment;
 
 import org.w3c.dom.Text;
 
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SetSatellActivity extends Activity {
 
@@ -37,10 +41,13 @@ public class SetSatellActivity extends Activity {
     Button btnSave;
     String dYear, dMonth, dDay;
     String cycleText = "매주 ";
+    String addDayStr = "";
+    String addDayTmp = "";
     Calendar calendar = Calendar.getInstance();
     TextView habitContents;
     int sw[] = {0, 0, 0, 0, 0, 0, 0};
     String dayArray[] = {"일", "월", "화", "수", "목", "금", "토"};
+    Map<Integer, String> mapDay;
 
     int isClickedStartdate = 0, isClickedEnddate = 0;
     DatePickerDialog.OnDateSetListener myDatePicker = new DatePickerDialog.OnDateSetListener() {
@@ -80,6 +87,8 @@ public class SetSatellActivity extends Activity {
         btnStartTime = (ImageButton) findViewById(R.id.clockStart);
         btnEndTime = (ImageButton) findViewById(R.id.clockEnd);
 
+        mapDay = new HashMap<Integer, String>();
+
         for (int i = 0; i < btnWeekIDs.length; i++) {
 
             final int index;
@@ -90,9 +99,9 @@ public class SetSatellActivity extends Activity {
         for (int i = 0; i < btnWeekIDs.length; i++) {
 
             final int index;
-            final String dayOfTheWeek;
+            final String dayOfWeek;
 
-            dayOfTheWeek = dayArray[i];
+            dayOfWeek = dayArray[i];
             index = i;
 
                     btnWeek[i].setOnClickListener(new View.OnClickListener() {
@@ -104,32 +113,51 @@ public class SetSatellActivity extends Activity {
                             if (sw[index] == 0) {
                                 sw[index] = 1;
                                 btnWeek[index].setTextColor(Color.BLACK);
+                                mapDay.put(index, dayOfWeek);
 
-                                if(cycleText.length()>=15){
+                                Object[] mapkey = mapDay.keySet().toArray();
+                                Arrays.sort(mapkey);
 
-                                    cycleText += dayOfTheWeek + ",";
-                                    tvCycle.setText("매일");
-                                }else{
-                                    cycleText += dayOfTheWeek + ",";
-                                    tvCycle.setText(cycleText);
+                                for (Integer nKey : mapDay.keySet()){
+                                    addDayStr += mapDay.get(nKey)+",";
+                                    Log.d("addDayStr", mapDay.get(nKey));
                                 }
+
+                                if(addDayStr.length()==14) {
+                                    tvCycle.setText("매일");
+                                    addDayTmp = "매일";
+                                    addDayStr = "";
+                                } else {
+                                    tvCycle.setText(cycleText+addDayStr);
+                                    addDayTmp = addDayStr; //임시 데이터 저장 변수
+                                    addDayStr = "";
+                                }
+
+
 
 
 
                             } else {
                                 sw[index] = 0;
                                 btnWeek[index].setTextColor(Color.WHITE);
-
-                                String remove = StringUtils.remove(cycleText, dayOfTheWeek + ",");
-                                if(remove.length()>3){
-                                    tvCycle.setText(remove);
-                                    cycleText = remove;
-                                } else
-                                {
-                                    tvCycle.setText("");
-                                    cycleText = "매주 ";
+                                mapDay.remove(index);
+                                for (Integer nKey : mapDay.keySet()){
+                                    addDayStr += mapDay.get(nKey)+",";
+                                    Log.d("addDayStr", mapDay.get(nKey));
                                 }
 
+
+                                if(addDayStr.length()>=2)
+                                {
+                                    tvCycle.setText(cycleText+addDayStr);
+                                    addDayTmp = addDayStr; //임시 데이터 저장 변수
+                                    addDayStr = "";
+
+                                } else {
+                                    tvCycle.setText("");
+                                    addDayTmp = addDayStr; //임시 데이터 저장 변수
+                                    addDayStr = "";
+                                }
 
 
                             }
@@ -172,7 +200,7 @@ public class SetSatellActivity extends Activity {
                             String msg;
                             if (hour < 12) {
 
-                                msg = String.format("AM %d: %d분", hour, min);
+                                msg = String.format("오전 %d: %d분", hour, min);
                                 etStartTime.setText(msg);
                             } else {
 
@@ -223,7 +251,9 @@ public class SetSatellActivity extends Activity {
                     intent.putExtra("endDate", etEndDate.getText().toString());
                     intent.putExtra("startTime", etStartTime.getText().toString());
                     intent.putExtra("endTime", etEndTime.getText().toString());
-                    intent.putExtra("cycle", etRule.getText().toString());
+                    intent.putExtra("cycle", addDayTmp);
+                    setResult(RESULT_OK,intent);
+                    finish();
                 }
             });
 
